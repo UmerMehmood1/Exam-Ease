@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/btm_nav_bar"
+        android:layout_marginBottom="-17dp"
+        android:background="#FFFFFF"
+        android:elevation="4dp"
+        app:cardCornerRadius="25dp"
+        app:cardElevation="15dp">
+
+
+        <androidx.fragment.app.FragmentContainerView
+            android:id="@+id/student_fragement_viewer"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:layout="@layout/student_course_enrolled_fragment" />
+    </androidx.cardview.widget.CardView>
+
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/btm_nav_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="#40FFFFFF"
+        android:clickable="false"
+        android:longClickable="false"
+        android:padding="10dp"
+        android:paddingBottom="10dp"
+        android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
+        app:itemPaddingBottom="10dp"
+        app:itemPaddingTop="25dp"
+        app:itemRippleColor="#17695C"
+        app:menu="@menu/student_bottom_nav_menu" />
+
+</RelativeLayout>

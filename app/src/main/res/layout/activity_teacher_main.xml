@@ -1,0 +1,50 @@
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/instructor_btm_nav_bar"
+        android:layout_marginBottom="-17dp"
+        android:background="#FFFFFF"
+        android:elevation="4dp"
+        app:cardCornerRadius="25dp"
+        app:cardElevation="15dp">
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/add_course_fb"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|end"
+            android:layout_margin="16dp"
+            android:src="@android:drawable/ic_input_add"
+            tools:ignore="SpeakableTextPresentCheck" />
+
+        <androidx.fragment.app.FragmentContainerView
+            android:id="@+id/instructor_fragement_viewer"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:layout="@layout/instructor_course_leading_fragment" />
+    </androidx.cardview.widget.CardView>
+
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/instructor_btm_nav_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="#40FFFFFF"
+        android:clickable="false"
+        android:longClickable="false"
+        android:padding="10dp"
+        android:paddingBottom="10dp"
+        android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
+        app:itemPaddingBottom="10dp"
+        app:itemPaddingTop="25dp"
+        app:itemRippleColor="#17695C"
+        app:menu="@menu/instructor_btm_nav_menu" />
+
+</RelativeLayout>

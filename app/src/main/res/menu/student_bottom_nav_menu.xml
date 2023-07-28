@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/enrolled_courses"
+        android:icon="@drawable/baseline_home_24"
+        android:title="Enrolled Courses" />
+    <item android:id="@+id/available_courses"
+        android:icon="@drawable/available_courses"
+        android:title="Available Courses" />
+    <item android:id="@+id/search"
+        android:icon="@drawable/baseline_search_24"
+        android:title="Search" />
+    <item android:id="@+id/profile"
+        android:icon="@drawable/baseline_account_circle_24"
+        android:title="Profile" />
+</menu>
