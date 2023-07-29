@@ -10,8 +10,10 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.picsart.studio.DBHelper.FirebaseHelper;
 import com.picsart.studio.Instructor.Adapter.QuizAdapterAtLeadingCourse;
 import com.picsart.studio.Instructor.Activities.AddQuiz;
 import com.picsart.studio.Models.Quiz;
@@ -28,19 +30,22 @@ public class CourseQuizzes extends AppCompatActivity {
     RecyclerView recyclerView;
     List<Quiz> quizList;
     ImageButton back;
+    FirebaseHelper firebaseHelper;
     FloatingActionButton floating_button_add_quiz;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.instructor_quiz_activity);
         quizList = new ArrayList<>();
-        SharedPreferences sh = getSharedPreferences("course_data", Context.MODE_PRIVATE);
-        this.course_id = sh.getString("course_id","");
-        this.name = sh.getString("course_name","");
-        this.course_img = sh.getInt("course_img",0);
-        this.category = sh.getString("course_category","");
-        this.description = sh.getString("course_description","");
-        this.duration = sh.getString("course_duration","");
+        firebaseHelper = new FirebaseHelper();
+        Intent get_intent = getIntent();
+        teacher_id = getSharedPreferences("teacher_data", MODE_PRIVATE).getString("id","");
+        this.course_id = get_intent.getStringExtra("course_id");
+        this.name = get_intent.getStringExtra("course_name");
+        this.course_img = get_intent.getIntExtra("course_img",0);
+        this.category = get_intent.getStringExtra("course_category");
+        this.description = get_intent.getStringExtra("course_description");
+        this.duration = get_intent.getStringExtra("course_duration");
         course_title = findViewById(R.id.coursse_title_at_instructor_quiz_view);
         course_category = findViewById(R.id.course_category_at_instructor_quiz_view);
         course_description = findViewById(R.id.course_description_at_instructor_quiz_view);
@@ -48,18 +53,22 @@ public class CourseQuizzes extends AppCompatActivity {
         floating_button_add_quiz = findViewById(R.id.add_quiz_floating_button);
         back = findViewById(R.id.back_btn);
         back.setOnClickListener(l->{finish();});
-
         course_title.setText(name);
         course_category.setText(category);
         course_description.setText(description);
-
-        QuizAdapterAtLeadingCourse quizAdapterAtLeadingCourse = new QuizAdapterAtLeadingCourse(this, quizList, teacher_id, course_id);
+        Toast.makeText(this, teacher_id+" is the teacher ID at quiz view", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, course_id+" is the course ID at quiz view", Toast.LENGTH_SHORT).show();
+        QuizAdapterAtLeadingCourse quizAdapterAtLeadingCourse = new QuizAdapterAtLeadingCourse(this, quizList, teacher_id, course_id, name);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(quizAdapterAtLeadingCourse);
+        firebaseHelper.getQuizzesByCourseAndInstructorId(course_id,teacher_id).addOnCompleteListener(l->{
+            quizAdapterAtLeadingCourse.mData = l.getResult();
+            Toast.makeText(this, String.valueOf(quizAdapterAtLeadingCourse.mData.get(0).getTotalQuestions()), Toast.LENGTH_SHORT).show();
+            quizAdapterAtLeadingCourse.notifyDataSetChanged();
+        });
         floating_button_add_quiz.setOnClickListener(l->{
             Intent intent1 = new Intent(this, AddQuiz.class);
-            intent1.putExtra("teacher_id",teacher_id);
-            intent1.putExtra("course_id",teacher_id);
+            intent1.putExtra("course_id",course_id);
             startActivity(intent1);
         });
 

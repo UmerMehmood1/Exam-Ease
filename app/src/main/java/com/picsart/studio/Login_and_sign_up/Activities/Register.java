@@ -30,7 +30,7 @@ public class Register extends AppCompatActivity {
 
         register.setOnClickListener(l->{
             firebaseHelperUser = new FirebaseHelper();
-            firebaseHelperUser.addUser(new User(name.getText().toString(),R.drawable.img_1_intro,"Beginner",dob.getText().toString(), password.getText().toString(),"Student"))
+            firebaseHelperUser.addUser(new User(name.getText().toString(),String.valueOf(R.drawable.img_1_intro),"Beginner",dob.getText().toString(), password.getText().toString(),"Student"))
                     .addOnCompleteListener(task -> {
                         if (task.isSuccessful()) {
                             Toast.makeText(this, "Registered Succesfully", Toast.LENGTH_SHORT).show();

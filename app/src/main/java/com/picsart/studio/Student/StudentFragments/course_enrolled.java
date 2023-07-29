@@ -1,5 +1,8 @@
 package com.picsart.studio.Student.StudentFragments;
 
+import static android.content.Context.MODE_PRIVATE;
+
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,13 +28,7 @@ public class course_enrolled extends Fragment {
     String name,id,badge,dob;
     String image;
     FirebaseHelper firebaseHelper;
-    public course_enrolled(String id, String name, String image, String badge, String dob) {
-        this.id= id;
-        this.name= name;
-        this.image = image;
-        this.badge = badge;
-        this.dob = dob;
-        // Required empty public constructor
+    public course_enrolled() {
     }
 
     @Override
@@ -39,7 +36,12 @@ public class course_enrolled extends Fragment {
         View view = inflater.inflate(R.layout.student_course_enrolled_fragment, container, false);
         firebaseHelper = new FirebaseHelper();
         enrolled_courses = new ArrayList<>();
-
+        SharedPreferences sh = getActivity().getSharedPreferences("Student_data",MODE_PRIVATE);
+        this.id = sh.getString("id","");
+        this.name = sh.getString("name","");
+        this.image = sh.getString("img", "");
+        this.badge = sh.getString("badge","");
+        this.dob = sh.getString("dob","");
         RecyclerView enrolledrecycler = view.findViewById(R.id.recycler_view_course_available);
         Course_Enrolled_Adapter enrolledcoursesAdapter = new Course_Enrolled_Adapter(requireContext(), enrolled_courses);
         enrolledrecycler.setLayoutManager(new GridLayoutManager(requireContext(), 2));

@@ -36,6 +36,7 @@ public class Teacher_main extends AppCompatActivity {
         String badge = sh.getString("badge","");
         String dob = sh.getString("dob","");
         Toast.makeText(this, teacher_id, Toast.LENGTH_SHORT).show();
+
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.instructor_fragement_viewer, new course_leading())
@@ -54,7 +55,7 @@ public class Teacher_main extends AppCompatActivity {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 if (item.getItemId() == R.id.courses_leading) {
-                    loadFrag( new course_leading());
+                    loadFrag(new course_leading());
                     add_course.setVisibility(View.VISIBLE);
                 } else if (item.getItemId() == R.id.search) {
                     add_course.setVisibility(View.GONE);

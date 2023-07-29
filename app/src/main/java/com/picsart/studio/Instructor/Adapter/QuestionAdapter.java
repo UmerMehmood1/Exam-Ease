@@ -106,7 +106,7 @@ public class QuestionAdapter extends RecyclerView.Adapter<QuestionAdapter.MyView
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
-                    question.setSelectedOption(0);
+                    question.setCorrectOptionIndex(0);
                 }
             }
         });
@@ -114,7 +114,7 @@ public class QuestionAdapter extends RecyclerView.Adapter<QuestionAdapter.MyView
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
-                    question.setSelectedOption(1);
+                    question.setCorrectOptionIndex(1);
                 }
             }
         });
@@ -122,7 +122,7 @@ public class QuestionAdapter extends RecyclerView.Adapter<QuestionAdapter.MyView
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
-                    question.setSelectedOption(2);
+                    question.setCorrectOptionIndex(2);
                 }
             }
         });
@@ -130,7 +130,7 @@ public class QuestionAdapter extends RecyclerView.Adapter<QuestionAdapter.MyView
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
-                    question.setSelectedOption(3);
+                    question.setCorrectOptionIndex(3);
                 }
             }
         });

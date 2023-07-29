@@ -1,7 +1,5 @@
 package com.picsart.studio.Instructor.Activities;
 
-import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.Toast;
@@ -35,19 +33,16 @@ public class AddQuestionActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         options = new ArrayList<>();
         setContentView(R.layout.instructor_add_question_activity);
-        SharedPreferences quiz_data = getSharedPreferences("quiz_data",MODE_PRIVATE);
-        this.quiz_name = quiz_data.getString("quiz_name", "");
-        this.total_question = (int) quiz_data.getLong("quiz_total_question", 1);
-        SharedPreferences course_data = getSharedPreferences("course_data",MODE_PRIVATE);
-        this.course_id = course_data.getString("course_id","");
-        SharedPreferences teacher_data = getSharedPreferences("teacher_data",MODE_PRIVATE);
-        this.teacher_id = teacher_data.getString("teacher_id","");
+        this.quiz_name = getIntent().getStringExtra("quiz_name");
+        this.total_question = (int) getIntent().getLongExtra("quiz_total_question", 1);
+        this.course_id = getIntent().getStringExtra("course_id");
+        this.teacher_id = getSharedPreferences("teacher_data", MODE_PRIVATE).getString("id","");
+        Toast.makeText(this, course_id + " at Quiz Clicked.", Toast.LENGTH_SHORT).show();
 
         questionList = new ArrayList<>();
         List<String> data = Arrays.asList(new String[]{"Option 1", "Option 1","Option 1","Option 1"});
         for (int i = 0; i < total_question; i++){
             questionList.add(new Question("Some Content",data, 1));
-            Toast.makeText(this, questionList.toString(), Toast.LENGTH_SHORT).show();
         }
         recyclerView = findViewById(R.id.recycler_view_to_add_questions);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));

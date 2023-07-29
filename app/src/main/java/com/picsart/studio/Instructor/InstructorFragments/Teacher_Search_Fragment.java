@@ -29,12 +29,6 @@ public class Teacher_Search_Fragment extends Fragment {
     List<Course> search_courses;
     String teacher_id;
     public Teacher_Search_Fragment() {
-        SharedPreferences sh = getActivity().getSharedPreferences("teacher_data", Context.MODE_PRIVATE);
-        this.teacher_id = sh.getString("id","");
-        String name = sh.getString("name","");
-        String image = sh.getString("img","");
-        String badge = sh.getString("badge","");
-        String dob = sh.getString("dob","");
     }
 
     @Override
@@ -45,6 +39,12 @@ public class Teacher_Search_Fragment extends Fragment {
         recyclerView =view.findViewById(R.id.recycler_view_course);
         firebaseHelper = new FirebaseHelper();
         Available_Course_Adapter availablecoursesAdapter = new Available_Course_Adapter(requireContext(), search_courses, teacher_id);
+        SharedPreferences sh = getActivity().getSharedPreferences("teacher_data", Context.MODE_PRIVATE);
+        this.teacher_id = sh.getString("id","");
+        String name = sh.getString("name","");
+        String image = sh.getString("img","");
+        String badge = sh.getString("badge","");
+        String dob = sh.getString("dob","");
         recyclerView.setLayoutManager(new GridLayoutManager(requireContext(), 2));
         recyclerView.setAdapter(availablecoursesAdapter);
         searchvalue.addTextChangedListener(new android.text.TextWatcher() {

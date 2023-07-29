@@ -23,7 +23,7 @@ import java.util.List;
 public class Instructor_Course_Leading_Adapter extends RecyclerView.Adapter<Instructor_Course_Leading_Adapter.MyViewHolder> {
 
     private Context context ;
-    private List<Course> mData ;
+    public List<Course> mData ;
     private String teacher_id ;
 
 
@@ -53,16 +53,14 @@ public class Instructor_Course_Leading_Adapter extends RecyclerView.Adapter<Inst
         holder.course_duration.setText(mData.get(position).getDuration());
         holder.course_quizzes.setText(String.valueOf(mData.get(position).getTotalQuizzes()));
         holder.cardview_content.setOnClickListener(l ->{
-            SharedPreferences sh = context.getSharedPreferences("course_data", Context.MODE_PRIVATE);
-            SharedPreferences.Editor editor = sh.edit();
-            editor.putString("course_id",mData.get(position).getId());
-            editor.putString("course_name",mData.get(position).getName());
-            editor.putInt("course_img",mData.get(position).getImg());
-            editor.putString("course_category",mData.get(position).getCategory());
-            editor.putString("course_description",mData.get(position).getDescription());
-            editor.putString("course_duration",mData.get(position).getDuration());
-            editor.putString("course_id",mData.get(position).getId());
-            context.startActivity(new Intent(context, CourseQuizzes.class));
+            Intent coruse_quiz = new Intent(context, CourseQuizzes.class);
+            coruse_quiz.putExtra("course_id",mData.get(position).getId());
+            coruse_quiz.putExtra("course_name",mData.get(position).getName());
+            coruse_quiz.putExtra("course_img",mData.get(position).getImg());
+            coruse_quiz.putExtra("course_category",mData.get(position).getCategory());
+            coruse_quiz.putExtra("course_description",mData.get(position).getDescription());
+            coruse_quiz.putExtra("course_duration",mData.get(position).getDuration());
+            context.startActivity(coruse_quiz);
         });
         holder.cardview_content.setOnLongClickListener(l->{
             UpdateCourseDialogBox updateCourseDialogBox = new UpdateCourseDialogBox(context, mData.get(position).getId(),teacher_id);

@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
@@ -19,16 +20,18 @@ import java.util.List;
 public class QuizAdapterAtLeadingCourse extends RecyclerView.Adapter<QuizAdapterAtLeadingCourse.MyViewHolder> {
 
         private Context context ;
-        private List<Quiz> mData ;
+        public List<Quiz> mData ;
         private String course_id ;
         private String teacher_id ;
+        private String course_name;
 
 
-        public QuizAdapterAtLeadingCourse(Context context, List<Quiz> mData, String teacher_id,String course_id) {
+        public QuizAdapterAtLeadingCourse(Context context, List<Quiz> mData, String teacher_id,String course_id, String course_name) {
             this.context = context;
             this.mData = mData;
             this.course_id = course_id;
             this.teacher_id = teacher_id;
+            this.course_name = course_name;
         }
 
         @Override
@@ -46,19 +49,10 @@ public class QuizAdapterAtLeadingCourse extends RecyclerView.Adapter<QuizAdapter
         public void onBindViewHolder(@NonNull QuizAdapterAtLeadingCourse.MyViewHolder holder, int position) {
 
             holder.quiz_title.setText(mData.get(position).getQuizName());
-            holder.course_name.setText(mData.get(position).getCourseId());
-            holder.quiz_title.setText(mData.get(position).getTotalQuestions());
+            holder.course_name.setText(course_name);
+            holder.total_questions.setText(String.valueOf(mData.get(position).getTotalQuestions()));
             holder.cardview_content.setOnClickListener(l ->{
-                Intent intent = new Intent(context, AddQuiz.class);
-                intent.putExtra("course_id",course_id);
-                intent.putExtra("teacher_id",teacher_id);
-                context.startActivity(intent);
-            });
-            holder.cardview_content.setOnLongClickListener(l->{
-//                UpdateCourseDialogBox updateCourseDialogBox = new UpdateCourseDialogBox(context, mData.get(position).getQuizId(),teacher_id);
-//                updateCourseDialogBox.show();
-//                return false;
-                return false;
+
             });
 
 
