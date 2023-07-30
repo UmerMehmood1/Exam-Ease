@@ -1,5 +1,7 @@
 package com.picsart.studio.Student.StudentFragments;
 
+import static android.content.Context.MODE_PRIVATE;
+
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -27,24 +29,20 @@ public class student_search extends Fragment {
     RecyclerView recyclerView;
     FirebaseHelper firebaseHelper;
     List<Course> search_courses;
-    String teacher_id;
+    String student_id;
     public student_search() {
-        SharedPreferences sh = getActivity().getSharedPreferences("teacher_data", Context.MODE_PRIVATE);
-        this.teacher_id = sh.getString("id","");
-        String name = sh.getString("name","");
-        String image = sh.getString("img","");
-        String badge = sh.getString("badge","");
-        String dob = sh.getString("dob","");
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.student_search_fragment, container, false);
+        SharedPreferences sh = getActivity().getSharedPreferences("student_data",MODE_PRIVATE);
+        this.student_id = sh.getString("id","");
         searchvalue =view.findViewById(R.id.Search_value);
         recyclerView =view.findViewById(R.id.recycler_view_course);
         firebaseHelper = new FirebaseHelper();
-        Available_Course_Adapter availablecoursesAdapter = new Available_Course_Adapter(requireContext(), search_courses, teacher_id);
+        Available_Course_Adapter availablecoursesAdapter = new Available_Course_Adapter(requireContext(), search_courses);
         recyclerView.setLayoutManager(new GridLayoutManager(requireContext(), 2));
         recyclerView.setAdapter(availablecoursesAdapter);
         searchvalue.addTextChangedListener(new android.text.TextWatcher() {

@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -39,10 +40,10 @@ public class Student_Course_Enrolled_Activity extends AppCompatActivity {
 
         Intent intent = getIntent();
         course_id = intent.getStringExtra("course_id");
-        Title = intent.getStringExtra("Content_type_img");
+        Title = intent.getStringExtra("content_name");
         Description = intent.getStringExtra("content_description");
         image = intent.getIntExtra("Content_type_img", 0);
-
+        Toast.makeText(this, course_id, Toast.LENGTH_SHORT).show();
         tvtitle = findViewById(R.id.txttitle);
         tvdescription = findViewById(R.id.txtDesc);
         tvcategory = findViewById(R.id.txtCat);
@@ -51,15 +52,21 @@ public class Student_Course_Enrolled_Activity extends AppCompatActivity {
         back.setOnClickListener(l->{
             finish();
         });
-        firebaseHelper.getCourseQuizzes(course_id).addOnCompleteListener(l->{quizzes = l.getResult();});
         recyclerView = findViewById(R.id.recycler_view_for_quiz_in_course_enrolled);
-        QuizAdapter quizAdapter = new QuizAdapter(this, quizzes, course_id);
+        QuizAdapter quizAdapter = new QuizAdapter(this, quizzes, course_id,Title);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(quizAdapter);
-        // Setting values
+
+        firebaseHelper.getQuizzesByCourseId(course_id).addOnCompleteListener(l -> {
+            if (l.isSuccessful()) {
+                quizAdapter.mData = l.getResult();
+                quizAdapter.notifyDataSetChanged();
+            } else {
+                Toast.makeText(this, "Failed to fetch quizzes", Toast.LENGTH_SHORT).show();
+            }
+        });
         tvtitle.setText(Title);
         tvdescription.setText(Description);
         img.setImageResource(image);
-        startActivity(new Intent(this, QuizActivity.class));
     }
 }

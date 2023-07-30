@@ -1,6 +1,7 @@
 package com.picsart.studio.DBHelper;
 
 import android.util.Log;
+import android.widget.Toast;
 
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -277,27 +278,45 @@ public class FirebaseHelper {
                     }
                 });
     }
-    public Task<List<Quiz>> getCourseQuizzes(String courseId) {
-        final TaskCompletionSource<List<Quiz>> taskCompletionSource = new TaskCompletionSource<>();
+    public Task<List<Quiz>> getQuizzesByCourseId(String courseId) {
+        CollectionReference quizzesRef = FirebaseFirestore.getInstance().collection("quizzes");
+        Query query = quizzesRef.whereEqualTo("course_id", courseId);
 
-        coursesCollection.document(courseId)
-                .collection("quizzes")
-                .get()
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        List<Quiz> quizzes = new ArrayList<>();
-                        for (QueryDocumentSnapshot document : task.getResult()) {
-                            Quiz quiz = document.toObject(Quiz.class);
-                            quizzes.add(quiz);
+        return query.get().continueWith(task -> {
+            List<Quiz> quizzes = new ArrayList<>();
+            if (task.isSuccessful()) {
+                QuerySnapshot querySnapshot = task.getResult();
+                for (QueryDocumentSnapshot documentSnapshot : querySnapshot) {
+                    // Manually extract data from the document and map it to Quiz object
+                    String quizId = documentSnapshot.getId();
+                    String quizName = documentSnapshot.getString("quiz_name");
+                    int totalQuestions = documentSnapshot.getLong("total_questions").intValue();
+                    String instructorId = documentSnapshot.getString("instructor_id");
+
+                    List<Question> questions = new ArrayList<>();
+                    List<Map<String, Object>> questionDataList = (List<Map<String, Object>>) documentSnapshot.get("questions");
+                    if (questionDataList != null) {
+                        for (Map<String, Object> questionData : questionDataList) {
+                            String questionText = (String) questionData.get("question_text");
+                            List<String> options = (List<String>) questionData.get("options");
+                            Long correctOptionIndexLong = (Long) questionData.get("correct_option_index");
+                            int correctOptionIndex = (correctOptionIndexLong != null) ? correctOptionIndexLong.intValue() : -1;
+
+                            Question question = new Question(questionText, options, correctOptionIndex);
+                            questions.add(question);
                         }
-                        taskCompletionSource.setResult(quizzes);
-                    } else {
-                        taskCompletionSource.setException(task.getException());
                     }
-                });
 
-        return taskCompletionSource.getTask();
+                    Quiz quiz = new Quiz(quizId, quizName, totalQuestions, courseId, instructorId, questions);
+                    quizzes.add(quiz);
+                }
+            } else {
+                // Handle error if the query fails
+            }
+            return quizzes;
+        });
     }
+
     //  Functions to implement
 
     public void storeQuizAttempt(String userId, String courseId, String quizId, int score) {

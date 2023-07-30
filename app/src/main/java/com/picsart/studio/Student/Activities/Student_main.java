@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
@@ -24,7 +26,7 @@ public class Student_main extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.student_interface);
-        SharedPreferences sh = getSharedPreferences("Student_data",MODE_PRIVATE);
+        SharedPreferences sh = getSharedPreferences("student_data",MODE_PRIVATE);
         String id = sh.getString("id","");
         String name = sh.getString("name","");
         String image = sh.getString("img", "");
@@ -46,7 +48,7 @@ public class Student_main extends AppCompatActivity {
                 if (item.getItemId() == R.id.enrolled_courses) {
                     loadFrag(new course_enrolled());
                 } else if (item.getItemId() == R.id.available_courses) {
-                    loadFrag(new course_available(id,name, image, badge, dob));
+                    loadFrag(new course_available());
                 } else if (item.getItemId() == R.id.search) {
                     loadFrag(new student_search());
                 } else if (item.getItemId() == R.id.profile) {

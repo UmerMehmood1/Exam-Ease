@@ -21,9 +21,7 @@ import java.util.List;
 public class Available_Course_Adapter extends RecyclerView.Adapter<Available_Course_Adapter.MyViewHolder> {
     private Context context ;
     private List<Course> mData ;
-    String id;
-    public Available_Course_Adapter(Context context, List<Course> mData, @Nullable String id) {
-        this.id = id;
+    public Available_Course_Adapter(Context context, List<Course> mData) {
         this.context = context;
         this.mData = mData;
     }
@@ -40,7 +38,6 @@ public class Available_Course_Adapter extends RecyclerView.Adapter<Available_Cou
         holder.cardView.setOnClickListener(l ->{
                 Intent intent = new Intent(context, Course_Detail.class);
                 // passing data to the book activity
-                intent.putExtra("Student_id",id);
                 intent.putExtra("Course_id",mData.get(position).getId());
                 intent.putExtra("Title",mData.get(position).getName());
                 intent.putExtra("Description",mData.get(position).getDescription());

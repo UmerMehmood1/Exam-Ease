@@ -1,5 +1,8 @@
 package com.picsart.studio.Student.StudentFragments;
 
+import static android.content.Context.MODE_PRIVATE;
+
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,12 +27,7 @@ public class course_available extends Fragment {
     String id, username, image, badge,dob;
     TextView name;
     FirebaseHelper firebaseHelper;
-    public course_available(String id, String username, String image, String badge, String dob ) {
-        this.id = id;
-        this.username = username;
-        this.image = image;
-        this.badge = badge;
-        this.dob = dob;
+    public course_available() {
     }
 
     @Override
@@ -37,10 +35,16 @@ public class course_available extends Fragment {
         View view = inflater.inflate(R.layout.student_course_available_fragment, container, false);
         available_courses = new ArrayList<>();
         firebaseHelper = new FirebaseHelper();
+        SharedPreferences sh = getActivity().getSharedPreferences("student_data",MODE_PRIVATE);
+        this.id = sh.getString("id","");
+        this.username = sh.getString("name","");
+        this.image = sh.getString("img", "");
+        this.badge = sh.getString("badge","");
+        this.dob = sh.getString("dob","");
         name = view.findViewById(R.id.username);
         name.setText("Welcome, "+username);
         RecyclerView availablerecycler = view.findViewById(R.id.recycler_view_course_available);
-        Available_Course_Adapter availablecoursesAdapter = new Available_Course_Adapter(requireContext(), available_courses, id);
+        Available_Course_Adapter availablecoursesAdapter = new Available_Course_Adapter(requireContext(), available_courses);
         firebaseHelper.getAllCoursesAvailable()
                 .addOnCompleteListener(result -> {
                     if (result.isSuccessful()) {

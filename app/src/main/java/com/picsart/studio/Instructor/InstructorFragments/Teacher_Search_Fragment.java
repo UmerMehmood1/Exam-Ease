@@ -38,7 +38,7 @@ public class Teacher_Search_Fragment extends Fragment {
         searchvalue =view.findViewById(R.id.Search_value);
         recyclerView =view.findViewById(R.id.recycler_view_course);
         firebaseHelper = new FirebaseHelper();
-        Available_Course_Adapter availablecoursesAdapter = new Available_Course_Adapter(requireContext(), search_courses, teacher_id);
+        Available_Course_Adapter availablecoursesAdapter = new Available_Course_Adapter(requireContext(), search_courses);
         SharedPreferences sh = getActivity().getSharedPreferences("teacher_data", Context.MODE_PRIVATE);
         this.teacher_id = sh.getString("id","");
         String name = sh.getString("name","");

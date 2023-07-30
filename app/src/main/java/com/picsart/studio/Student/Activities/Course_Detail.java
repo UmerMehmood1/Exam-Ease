@@ -1,6 +1,7 @@
 package com.picsart.studio.Student.Activities;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -19,13 +20,13 @@ public class Course_Detail extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.student_course_details);
-        Intent data = getIntent();
-        String id = data.getStringExtra("Student_id");
-        String course_id = data.getStringExtra("Course_id");
-        String course_title = data.getStringExtra("Title");
-        int img = data.getIntExtra("Thumbnail",R.drawable.achievement_svgrepo_com);
-        String description = data.getStringExtra("Description");
-        String category1 = data.getStringExtra("Category");
+        SharedPreferences sh = getSharedPreferences("Student_data",MODE_PRIVATE);
+        String id = sh.getString("id","");
+        String course_id = getIntent().getStringExtra("Course_id");
+        String course_title = getIntent().getStringExtra("Title");
+        int img = getIntent().getIntExtra("Thumbnail",R.drawable.achievement_svgrepo_com);
+        String description = getIntent().getStringExtra("Description");
+        String category1 = getIntent().getStringExtra("Category");
 
         name = findViewById(R.id.course_title_at_details);
         name.setText(course_title);
@@ -42,7 +43,7 @@ public class Course_Detail extends AppCompatActivity {
             firebaseHelper.enrollStudentInCourse(id,course_id)
                     .addOnCompleteListener(result -> {
                         if (result.isSuccessful()) {
-                            Toast.makeText(this, "Enrolled SuccessfullyEnrolled Successfully", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(this, "Enrolled Successfully", Toast.LENGTH_SHORT).show();
                         }
                     })
                     .addOnFailureListener(listener -> {

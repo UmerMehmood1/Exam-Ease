@@ -1,12 +1,12 @@
 package com.picsart.studio.Models;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class Question {
+public class Question implements Serializable {
     private String questionText;
     private List<String> options;
     private int correctOptionIndex;
-    private int selectedOption; // New field to store the selected option index
 
     public Question() {
         // Empty constructor needed for Firestore deserialization
@@ -16,7 +16,6 @@ public class Question {
         this.questionText = questionText;
         this.options = options;
         this.correctOptionIndex = correctOptionIndex;
-        this.selectedOption = -1; // Initialize the selected option to -1 (no option selected)
     }
 
     public String getQuestionText() {
@@ -41,13 +40,5 @@ public class Question {
 
     public void setCorrectOptionIndex(int correctOptionIndex) {
         this.correctOptionIndex = correctOptionIndex;
-    }
-
-    public int getSelectedOption() {
-        return selectedOption;
-    }
-
-    public void setSelectedOption(int selectedOption) {
-        this.selectedOption = selectedOption;
     }
 }

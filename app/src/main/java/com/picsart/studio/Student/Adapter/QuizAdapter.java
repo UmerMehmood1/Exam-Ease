@@ -1,29 +1,34 @@
 package com.picsart.studio.Student.Adapter;
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.picsart.studio.Models.Question;
 import com.picsart.studio.Models.Quiz;
 import com.picsart.studio.R;
+import com.picsart.studio.Student.Activities.QuizActivity;
 
 import java.util.ArrayList;
 import java.util.List;
 public class QuizAdapter extends RecyclerView.Adapter<QuizAdapter.MyViewHolder> {
     private Context context ;
-    private List<Quiz> mData ;
-    String course_id;
-    public QuizAdapter(Context context, List<Quiz> mData, @Nullable String course_id) {
+    public List<Quiz> mData ;
+    String course_id, Course_name;
+    public QuizAdapter(Context context, List<Quiz> mData, @Nullable String course_id, String Course_name) {
         this.course_id = course_id;
         this.context = context;
         this.mData = mData;
+        this.Course_name = Course_name;
     }
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -33,11 +38,12 @@ public class QuizAdapter extends RecyclerView.Adapter<QuizAdapter.MyViewHolder> 
     @Override
     public void onBindViewHolder(MyViewHolder holder, @SuppressLint("RecyclerView") final int position){
         holder.quiz_title.setText(mData.get(position).getQuizName());
-//        Still need to add name of course by its ID Filhal ID sy kam chla lyty
-        holder.course_title_at_quiz_card.setText(mData.get(position).getCourseId());
-        holder.total_questions.setText(mData.get(position).getTotalQuestions());
+        holder.course_title_at_quiz_card.setText(Course_name);
+        holder.total_questions.setText(String.valueOf(mData.get(position).getTotalQuestions()));
         holder.cardView.setOnClickListener(l->{
-//            Start the Quiz by using intent
+            Intent intent = new Intent(context, QuizActivity.class);
+            intent.putExtra("selectedQuiz", mData.get(position));
+            context.startActivity(intent);
         });
 
     }

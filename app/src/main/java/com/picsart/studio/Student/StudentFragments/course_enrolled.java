@@ -36,7 +36,7 @@ public class course_enrolled extends Fragment {
         View view = inflater.inflate(R.layout.student_course_enrolled_fragment, container, false);
         firebaseHelper = new FirebaseHelper();
         enrolled_courses = new ArrayList<>();
-        SharedPreferences sh = getActivity().getSharedPreferences("Student_data",MODE_PRIVATE);
+        SharedPreferences sh = getActivity().getSharedPreferences("student_data",MODE_PRIVATE);
         this.id = sh.getString("id","");
         this.name = sh.getString("name","");
         this.image = sh.getString("img", "");
@@ -52,9 +52,9 @@ public class course_enrolled extends Fragment {
                 enrolled_courses = task.getResult();
                 enrolledcoursesAdapter.setData(enrolled_courses);
             } else {
-                try{Toast.makeText(requireContext(), "Check internet connection", Toast.LENGTH_SHORT).show();}catch (Exception e){}
-            }
-        });
+                Toast.makeText(requireContext(), "Check internet connection", Toast.LENGTH_SHORT).show();
+        }
+    });
 
         username = view.findViewById(R.id.username);
         username.setText("Welcome, " + name);

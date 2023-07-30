@@ -20,12 +20,6 @@ public class student_profile extends Fragment {
     TextView name,badge_if_any;
     ImageView profile_img;
     public student_profile() {
-        SharedPreferences sh = getActivity().getSharedPreferences("teacher_data", Context.MODE_PRIVATE);
-        this.teacher_id = sh.getString("id","");
-        this.username = sh.getString("name","");
-        this.image = sh.getString("img","");
-        this.badge = sh.getString("badge","");
-        this.dob = sh.getString("dob","");
     }
 
     @Override
@@ -35,6 +29,13 @@ public class student_profile extends Fragment {
         name = view.findViewById(R.id.username);
         name.setText(username);
 
+        SharedPreferences sh = getActivity().getSharedPreferences("student_data", Context.MODE_PRIVATE);
+        this.teacher_id = sh.getString("id","");
+        this.username = sh.getString("name","");
+        this.image = sh.getString("img","");
+        this.badge = sh.getString("badge","");
+        this.dob = sh.getString("dob","");
+
         profile_img = view.findViewById(R.id.user_profile_img);
         profile_img.setImageResource(Integer.valueOf(image));
         badge_if_any = view.findViewById(R.id.badge);
@@ -43,7 +44,7 @@ public class student_profile extends Fragment {
         back = view.findViewById(R.id.back);
                 back.setOnClickListener(l->{
                     getActivity().getSupportFragmentManager().beginTransaction()
-                            .replace(R.id.student_fragement_viewer, new course_enrolled(teacher_id,username, image, badge, dob))
+                            .replace(R.id.student_fragement_viewer, new course_enrolled())
                             .commit();
                 });
         return view;

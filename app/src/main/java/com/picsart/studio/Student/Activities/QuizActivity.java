@@ -1,5 +1,6 @@
 package com.picsart.studio.Student.Activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -12,6 +13,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.picsart.studio.Models.Question;
+import com.picsart.studio.Models.Quiz;
 import com.picsart.studio.R;
 
 import java.util.ArrayList;
@@ -31,6 +33,8 @@ public class QuizActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.student_quiz_helding);
+        Intent intent = getIntent();
+        Quiz selectedQuiz = (Quiz) intent.getSerializableExtra("selectedQuiz");
 
         // Initialize views
         textViewQuestion = findViewById(R.id.textViewQuestion);
@@ -38,7 +42,7 @@ public class QuizActivity extends AppCompatActivity {
         buttonSubmit = findViewById(R.id.buttonSubmit);
 
         // Sample quiz questions - replace with your actual quiz questions
-        quizQuestions = getSampleQuizQuestions();
+        quizQuestions = selectedQuiz.getQuestions();
 
         // Initialize current question index
         currentQuestionIndex = 0;
