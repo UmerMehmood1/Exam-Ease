@@ -10,11 +10,18 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.viewpager2.widget.ViewPager2;
 
+import com.picsart.studio.Instructor.Adapter.InstructorViewPagerAdapter;
+import com.picsart.studio.Instructor.Adapter.Instructor_Course_Leading_Adapter;
+import com.picsart.studio.Instructor.InstructorFragments.Instructor_Quiz_Fragment;
+import com.picsart.studio.Instructor.InstructorFragments.QuizPerformedFragment;
 import com.picsart.studio.Student.Adapter.QuizAdapter;
 import com.picsart.studio.DBHelper.FirebaseHelper;
 import com.picsart.studio.Models.Quiz;
 import com.picsart.studio.R;
+import com.picsart.studio.Student.StudentFragments.Student_Quiz_Attempt_Fragment;
+import com.picsart.studio.Student.StudentFragments.Student_Quiz_View;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,20 +31,18 @@ public class Student_Course_Enrolled_Activity extends AppCompatActivity {
     private TextView tvtitle,tvdescription,tvcategory;
     private ImageView img;
     private ImageButton back;
-    private RecyclerView recyclerView;
-    private List<Quiz> quizzes;
     private FirebaseHelper firebaseHelper;
     private String course_id;
     int image;
     String Title;
     String Description;
+    ViewPager2 myViewPager2;
+    InstructorViewPagerAdapter myAdapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.student_course_details_enrolled);
-        quizzes = new ArrayList<>();
         firebaseHelper = new FirebaseHelper();
-
         Intent intent = getIntent();
         course_id = intent.getStringExtra("course_id");
         Title = intent.getStringExtra("content_name");
@@ -52,19 +57,18 @@ public class Student_Course_Enrolled_Activity extends AppCompatActivity {
         back.setOnClickListener(l->{
             finish();
         });
-        recyclerView = findViewById(R.id.recycler_view_for_quiz_in_course_enrolled);
-        QuizAdapter quizAdapter = new QuizAdapter(this, quizzes, course_id,Title);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerView.setAdapter(quizAdapter);
 
-        firebaseHelper.getQuizzesByCourseId(course_id).addOnCompleteListener(l -> {
-            if (l.isSuccessful()) {
-                quizAdapter.mData = l.getResult();
-                quizAdapter.notifyDataSetChanged();
-            } else {
-                Toast.makeText(this, "Failed to fetch quizzes", Toast.LENGTH_SHORT).show();
-            }
-        });
+
+        myViewPager2 = findViewById(R.id.viewpager_at_student_quiz_view);
+        myAdapter = new InstructorViewPagerAdapter(getSupportFragmentManager(), getLifecycle());
+
+        // add Fragments in your ViewPagerFragmentAdapter class
+        myAdapter.addFragment(new Student_Quiz_View(course_id, Title));
+        myAdapter.addFragment(new Student_Quiz_Attempt_Fragment());
+
+        myViewPager2.setOrientation(ViewPager2.ORIENTATION_HORIZONTAL);
+        myViewPager2.setAdapter(myAdapter);
+
         tvtitle.setText(Title);
         tvdescription.setText(Description);
         img.setImageResource(image);

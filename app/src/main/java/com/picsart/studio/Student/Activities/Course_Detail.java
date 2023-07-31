@@ -1,6 +1,5 @@
 package com.picsart.studio.Student.Activities;
 
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.widget.ImageView;
@@ -20,7 +19,7 @@ public class Course_Detail extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.student_course_details);
-        SharedPreferences sh = getSharedPreferences("Student_data",MODE_PRIVATE);
+        SharedPreferences sh = getSharedPreferences("student_data",MODE_PRIVATE);
         String id = sh.getString("id","");
         String course_id = getIntent().getStringExtra("Course_id");
         String course_title = getIntent().getStringExtra("Title");

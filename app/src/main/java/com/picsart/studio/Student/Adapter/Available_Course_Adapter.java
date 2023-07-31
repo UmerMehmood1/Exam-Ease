@@ -33,9 +33,12 @@ public class Available_Course_Adapter extends RecyclerView.Adapter<Available_Cou
     @Override
     public void onBindViewHolder(MyViewHolder holder, @SuppressLint("RecyclerView") final int position) {
 
-        holder.tv_book_title.setText(mData.get(position).getName());
-        holder.img_book_thumbnail.setImageResource(mData.get(position).getImg());
-        holder.cardView.setOnClickListener(l ->{
+        holder.course_title.setText(mData.get(position).getName());
+        holder.category.setText(mData.get(position).getCategory());
+        holder.t_quiz.setText(String.valueOf(mData.get(position).getTotalQuizzes()));
+        holder.duration.setText(mData.get(position).getDuration());
+        holder.course_img.setImageResource(mData.get(position).getImg());
+        holder.cardview_content.setOnClickListener(l ->{
                 Intent intent = new Intent(context, Course_Detail.class);
                 // passing data to the book activity
                 intent.putExtra("Course_id",mData.get(position).getId());
@@ -68,17 +71,17 @@ public class Available_Course_Adapter extends RecyclerView.Adapter<Available_Cou
     }
     public static class MyViewHolder extends RecyclerView.ViewHolder {
 
-        TextView tv_book_title;
-        ImageView img_book_thumbnail;
-        CardView cardView ;
-
+        ImageView course_img;
+        TextView course_title, category, duration, t_quiz;
+        CardView cardview_content;
         public MyViewHolder(View itemView) {
             super(itemView);
-
-            tv_book_title = itemView.findViewById(R.id.course_title) ;
-            img_book_thumbnail = itemView.findViewById(R.id.course_img);
-            cardView = itemView.findViewById(R.id.cardview_course_on_home);
-
+            course_title = itemView.findViewById(R.id.course_title_at_enrolled) ;
+            category = itemView.findViewById(R.id.course_category_at_enrolled);
+            duration = itemView.findViewById(R.id.course_duration_at_enrolled);
+            t_quiz = itemView.findViewById(R.id.total_quizzes_at_enrolled);
+            course_img = itemView.findViewById(R.id.course_img);
+            cardview_content = itemView.findViewById(R.id.cardview_course_on_home);
 
         }
     }

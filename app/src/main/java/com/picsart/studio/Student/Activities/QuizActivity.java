@@ -1,6 +1,7 @@
 package com.picsart.studio.Student.Activities;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -12,6 +13,7 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.picsart.studio.DBHelper.FirebaseHelper;
 import com.picsart.studio.Models.Question;
 import com.picsart.studio.Models.Quiz;
 import com.picsart.studio.R;
@@ -25,9 +27,11 @@ public class QuizActivity extends AppCompatActivity {
     private TextView textViewQuestion;
     private RadioGroup radioGroupOptions;
     private Button buttonSubmit;
-
+    private FirebaseHelper firebaseHelper;
     private List<Question> quizQuestions;
     private int currentQuestionIndex;
+    private int scores = 0;
+    String courseId, quizId;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -35,6 +39,8 @@ public class QuizActivity extends AppCompatActivity {
         setContentView(R.layout.student_quiz_helding);
         Intent intent = getIntent();
         Quiz selectedQuiz = (Quiz) intent.getSerializableExtra("selectedQuiz");
+        courseId = intent.getStringExtra("course_id");
+        quizId = intent.getStringExtra("quiz_id");
 
         // Initialize views
         textViewQuestion = findViewById(R.id.textViewQuestion);
@@ -59,15 +65,6 @@ public class QuizActivity extends AppCompatActivity {
         });
     }
 
-    // Sample method to get quiz questions - Replace this with your actual method to retrieve quiz questions
-    private List<Question> getSampleQuizQuestions() {
-        List<Question> questions = new ArrayList<>();
-        questions.add(new Question("Question 1: What is 2 + 2?", Arrays.asList("3", "4", "5", "6"), 1));
-        questions.add(new Question("Question 2: What is the capital of France?", Arrays.asList("London", "Paris", "Berlin", "Rome"), 1));
-        // Add more quiz questions as needed
-        return questions;
-    }
-
     private void displayQuestion() {
         if (currentQuestionIndex < quizQuestions.size()) {
             Question currentQuestion = quizQuestions.get(currentQuestionIndex);
@@ -83,27 +80,27 @@ public class QuizActivity extends AppCompatActivity {
                 radioButton.setText(currentQuestion.getOptions().get(i));
                 radioGroupOptions.addView(radioButton);
             }
-        } else {
-            // Quiz completed, show a message or navigate to the next activity, etc.
-            // For example, you can show a Toast message:
+        }
+        else {
+            firebaseHelper = new FirebaseHelper();
+            SharedPreferences sharedPreferences = getSharedPreferences("student_data", MODE_PRIVATE);
+            String userId = sharedPreferences.getString("id","");
+            firebaseHelper.storeQuizAttempt(userId,courseId,quizId,scores);
+            finish();
             showToast("Quiz completed!");
         }
     }
 
     private void handleAnswerSubmission() {
         if (currentQuestionIndex < quizQuestions.size()) {
-            // Get the selected answer index from RadioGroup
             int selectedOptionIndex = radioGroupOptions.indexOfChild(findViewById(radioGroupOptions.getCheckedRadioButtonId()));
-
-            // Compare the selected option with the correct option index for the current question
             Question currentQuestion = quizQuestions.get(currentQuestionIndex);
             if (selectedOptionIndex == currentQuestion.getCorrectOptionIndex()) {
                 showToast("Correct!");
+                scores++;
             } else {
                 showToast("Incorrect!");
             }
-
-            // Move to the next question
             currentQuestionIndex++;
             displayQuestion();
         }

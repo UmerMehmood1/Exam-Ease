@@ -2,7 +2,6 @@ package com.picsart.studio.Instructor.Adapter;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,8 +12,8 @@ import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.picsart.studio.Instructor.InstructorFragments.CourseQuizzes;
-import com.picsart.studio.Instructor.CustomDialogBox.UpdateCourseDialogBox;
+import com.picsart.studio.Instructor.Activities.UpdateCourseActivity;
+import com.picsart.studio.Instructor.Activities.CourseQuizzes;
 import com.picsart.studio.Models.Course;
 import com.picsart.studio.R;
 import java.util.List;
@@ -63,8 +62,10 @@ public class Instructor_Course_Leading_Adapter extends RecyclerView.Adapter<Inst
             context.startActivity(coruse_quiz);
         });
         holder.cardview_content.setOnLongClickListener(l->{
-            UpdateCourseDialogBox updateCourseDialogBox = new UpdateCourseDialogBox(context, mData.get(position).getId(),teacher_id);
-            updateCourseDialogBox.show();
+            Intent update = new Intent(context, UpdateCourseActivity.class);
+            update.putExtra("Course_id",mData.get(position).getId());
+            update.putExtra("teacher_id",teacher_id);
+            context.startActivity(update);
             return false;
         });
 

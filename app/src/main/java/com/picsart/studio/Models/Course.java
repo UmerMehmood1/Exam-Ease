@@ -79,8 +79,8 @@ public class Course {
         this.duration = duration;
     }
 
-    public String getTotalQuizzes() {
-        return String.valueOf(totalQuizzes);
+    public int getTotalQuizzes() {
+        return totalQuizzes;
     }
 
     public void setTotalQuizzes(int totalQuizzes) {

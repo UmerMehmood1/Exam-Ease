@@ -13,6 +13,8 @@ import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.picsart.studio.Instructor.Activities.AddQuiz;
+import com.picsart.studio.Instructor.Activities.UpdateQuiz;
+import com.picsart.studio.Instructor.CustomDialogBox.QuizLongClickListenerDialog;
 import com.picsart.studio.Models.Quiz;
 import com.picsart.studio.R;
 import java.util.List;
@@ -51,8 +53,10 @@ public class QuizAdapterAtLeadingCourse extends RecyclerView.Adapter<QuizAdapter
             holder.quiz_title.setText(mData.get(position).getQuizName());
             holder.course_name.setText(course_name);
             holder.total_questions.setText(String.valueOf(mData.get(position).getTotalQuestions()));
-            holder.cardview_content.setOnClickListener(l ->{
-
+            holder.cardview_content.setOnLongClickListener(l ->{
+                QuizLongClickListenerDialog quizLongClickListenerDialog = new QuizLongClickListenerDialog(context, mData.get(position).getQuizId(),mData.get(position).getCourseId());
+                quizLongClickListenerDialog.show();
+                return false;
             });
 
 

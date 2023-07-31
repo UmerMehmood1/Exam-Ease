@@ -33,7 +33,7 @@
         </androidx.cardview.widget.CardView>
 
         <TextView
-            android:id="@+id/course_category"
+            android:id="@+id/course_category_at_enrolled"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center|start"
@@ -44,7 +44,7 @@
             android:textSize="13sp" />
 
         <TextView
-            android:id="@+id/course_title"
+            android:id="@+id/course_title_at_enrolled"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="start"
@@ -60,7 +60,7 @@
             android:orientation="horizontal">
 
             <TextView
-                android:id="@+id/course_duration"
+                android:id="@+id/course_duration_at_enrolled"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -69,7 +69,7 @@
                 android:textColor="#6E6E6E" />
 
             <TextView
-                android:id="@+id/total_quizzes"
+                android:id="@+id/total_quizzes_at_enrolled"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"

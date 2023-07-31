@@ -42,6 +42,8 @@ public class QuizAdapter extends RecyclerView.Adapter<QuizAdapter.MyViewHolder> 
         holder.total_questions.setText(String.valueOf(mData.get(position).getTotalQuestions()));
         holder.cardView.setOnClickListener(l->{
             Intent intent = new Intent(context, QuizActivity.class);
+            intent.putExtra("course_id", mData.get(position).getCourseId());
+            intent.putExtra("quiz_id", mData.get(position).getQuizId());
             intent.putExtra("selectedQuiz", mData.get(position));
             context.startActivity(intent);
         });

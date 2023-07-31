@@ -104,17 +104,10 @@
 
 
     </androidx.core.widget.NestedScrollView>
-
-    <ScrollView
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/viewpager_at_student_quiz_view"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="25dp">
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recycler_view_for_quiz_in_course_enrolled"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-    </ScrollView>
-
+        android:layout_height="match_parent"
+        android:orientation="vertical" />
 
 </LinearLayout>

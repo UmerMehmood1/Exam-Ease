@@ -41,7 +41,6 @@ public class login extends AppCompatActivity {
                             User user = document.toObject(User.class);
                             if (user != null) {
                                 User user_extracted = new User(document.getId(), user.getName(), user.getImg(), user.getBadge(), user.getDob(), user.getPassword(), user.getUser_type());
-                                Log.d("Model Passed to Instructor Activity", user_extracted.getName() + " " + user_extracted.getUser_type());
                                 if ("Instructor".equals(user.getUser_type())) {
                                     SharedPreferences sharedPreferences = getSharedPreferences("teacher_data", MODE_PRIVATE);
                                     SharedPreferences.Editor teacher_editor = sharedPreferences.edit();

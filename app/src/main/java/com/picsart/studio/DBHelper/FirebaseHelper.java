@@ -1,9 +1,9 @@
 package com.picsart.studio.DBHelper;
 
 import android.util.Log;
-import android.widget.Toast;
 
 
+import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.TaskCompletionSource;
@@ -11,15 +11,14 @@ import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
-import com.google.firebase.firestore.WriteBatch;
 import com.picsart.studio.Models.Course;
 import com.picsart.studio.Models.Question;
 import com.picsart.studio.Models.Quiz;
+import com.picsart.studio.Models.Quiz_Attempts;
 import com.picsart.studio.Models.User;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -34,12 +33,15 @@ public class FirebaseHelper {
     private static final String USERS_COLLECTION_NAME = "users";
     private static final String QUIZ_COLLECTION_NAME = "quizzes";
     private static final String QUIZ_ATTEMPT_COLLECTION_NAME = "quiz_attempts";
+    private static final String USER_ENROLLED_IN_COURSE_COLLECTION_NAME = "course_enrolled";
     private FirebaseFirestore firestore;
     private CollectionReference coursesCollection;
     private CollectionReference contentsCollection;
     private CollectionReference usersCollection;
     private CollectionReference quizzesCollection;
     private CollectionReference quizAttemptsCollection;
+    private CollectionReference userEnrolledCollection;
+
     public FirebaseHelper() {
         firestore = FirebaseFirestore.getInstance();
         coursesCollection = firestore.collection(COURSES_COLLECTION_NAME);
@@ -47,11 +49,13 @@ public class FirebaseHelper {
         usersCollection = firestore.collection(USERS_COLLECTION_NAME);
         quizzesCollection = firestore.collection(QUIZ_COLLECTION_NAME);
         quizAttemptsCollection = firestore.collection(QUIZ_ATTEMPT_COLLECTION_NAME);
+        userEnrolledCollection = firestore.collection(USER_ENROLLED_IN_COURSE_COLLECTION_NAME);
     }
-//  Function Implemented
-    public Task<Void> updateCourse(String teacher_id,String courseId, Course course) {
-        String collectionPath = "/users/"+teacher_id+"/course_created/" + courseId;
-        DocumentReference courseRef = FirebaseFirestore.getInstance().document(collectionPath );
+
+    //  Function Implemented
+    public Task<Void> updateCourse(String teacher_id, String courseId, Course course) {
+        String collectionPath = "/users/" + teacher_id + "/course_created/" + courseId;
+        DocumentReference courseRef = FirebaseFirestore.getInstance().document(collectionPath);
 
         Map<String, Object> updates = new HashMap<>();
         updates.put("name", course.getName());
@@ -63,6 +67,7 @@ public class FirebaseHelper {
 
         return courseRef.update(updates);
     }
+
     public Task<List<DocumentSnapshot>> getUsersByNameAndPassword(String name, String password) {
         CollectionReference usersCollection = firestore.collection("users");
 
@@ -79,47 +84,95 @@ public class FirebaseHelper {
             }
         });
     }
-    public Task<DocumentSnapshot> getUserById(String userId) {
-        // Get the reference to the document for the specified user ID
-        DocumentReference userRef = firestore.collection("users").document(userId);
-        // Fetch the document and return the Task<DocumentSnapshot>
-        return userRef.get();
-    }
-    public Task<DocumentSnapshot> getCourseById(String courseId) {
-        DocumentReference courseRef = firestore.collection("courses").document(courseId);
-        return courseRef.get();
-    }
+
     public Task<DocumentReference> addUser(User user) {
         return usersCollection.add(user);
     }
-    public Task<List<Course>> getCoursesForStudent(String studentId) {
-        String collectionPath = "/users/" + studentId + "/enrolled_in";
-        CollectionReference enrolledCoursesRef = FirebaseFirestore.getInstance().collection(collectionPath);
 
-        return enrolledCoursesRef.get().continueWith(task -> {
-            List<Course> courses = new ArrayList<>();
+    public Task<Course> getCourseById(String courseId) {
+        String coursesCollectionPath = "courses";
+        CollectionReference coursesCollection = firestore.collection(coursesCollectionPath);
 
-            if (task.isSuccessful()) {
-                QuerySnapshot querySnapshot = task.getResult();
-                if (querySnapshot != null && !querySnapshot.isEmpty()) {
-                    for (QueryDocumentSnapshot document : querySnapshot) {
-                        String courseId = document.getId();
-                        String courseName = document.getString("name");
-                        String courseCategory = document.getString("category");
-                        String description = document.getString("description");
-                        String duration = document.getString("duration");
-                        int img = document.getLong("img").intValue();
-                        String teacher_id = document.getString("teacher_id");
-                        String t_quiz = document.getString("totalQuizzes");
-
-                        Course course = new Course(courseId, teacher_id, courseName, courseCategory, duration, Integer.valueOf(t_quiz), description, img);
-                        courses.add(course);
+        return coursesCollection.document(courseId).get().continueWith(new Continuation<DocumentSnapshot, Course>() {
+            @Override
+            public Course then(Task<DocumentSnapshot> task) throws Exception {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+                        Course course = document.toObject(Course.class);
+                        return course;
+                    } else {
+                        throw new Exception("Course not found.");
                     }
+                } else {
+                    throw task.getException();
                 }
             }
-
-            return courses;
         });
+    }
+
+    public Task<List<Course>> getEnrolledCoursesByStudentId(String studentId) {
+        // Collection path for course_enrolled
+        String courseEnrolledCollectionPath = "course_enrolled";
+
+        List<Task<Course>> courseTasks = new ArrayList<>();
+
+        // Get all documents where student_id matches the provided studentId
+        return firestore.collection(courseEnrolledCollectionPath)
+                .whereEqualTo("student_id", studentId)
+                .get()
+                .continueWithTask(task -> {
+                    // Handle the result of the initial query
+                    if (task.isSuccessful()) {
+                        QuerySnapshot querySnapshot = task.getResult();
+                        // Process the enrollment documents to get the course IDs
+                        for (DocumentSnapshot document : querySnapshot.getDocuments()) {
+                            String courseId = document.getString("course_id");
+                            if (courseId != null) {
+                                // Set the Course ID to the document ID
+                                Course course = new Course();
+                                course.setId(document.getId());
+                                // For each course ID, fetch the course details using getCourseById method
+                                Task<Course> c = getCourseById(courseId, course);
+                                courseTasks.add(c);
+                            }
+                        }
+
+                        // Continue with the next task: combining all Course tasks into a single task
+                        return Tasks.whenAllSuccess(courseTasks);
+                    } else {
+                        // Handle the failure case
+                        Log.e("Firestore Error", "Error fetching enrolled courses", task.getException());
+                        throw task.getException();
+                    }
+                });
+    }
+
+    private Task<Course> getCourseById(String courseId, Course course) {
+        String coursesCollectionPath = "courses";
+
+        // Get the document with the provided course ID
+        return firestore.collection(coursesCollectionPath).document(courseId).get()
+                .continueWith(task -> {
+                    if (task.isSuccessful()) {
+                        DocumentSnapshot document = task.getResult();
+                        if (document != null && document.exists()) {
+                            // Convert the document to a Course object
+                            Course fetchedCourse = document.toObject(Course.class);
+                            // Set the courseId of the fetched course to its documentId
+                            fetchedCourse.setId(document.getId());
+                            return fetchedCourse;
+                        } else {
+                            // Handle the case where the course document does not exist
+                            Log.d("Firestore Error", "Course document not found.");
+                            return null;
+                        }
+                    } else {
+                        // Handle the failure case
+                        Log.e("Firestore Error", "Error fetching course", task.getException());
+                        throw task.getException();
+                    }
+                });
     }
 
     public Task<List<Course>> getCoursesByTeacherId(String teacherId) {
@@ -143,7 +196,7 @@ public class FirebaseHelper {
                         String duration = documentSnapshot.getString("duration");
                         String name = documentSnapshot.getString("name");
                         int img = documentSnapshot.getLong("img").intValue();
-                        int totalQuizzes = Integer.parseInt(documentSnapshot.getString("totalQuizzes"));
+                        int totalQuizzes = documentSnapshot.getLong("totalQuizzes").intValue();
                         courses.add(new Course(courseId, teacherId, name, category, duration, totalQuizzes, description, img));
                     }
                 }
@@ -157,13 +210,13 @@ public class FirebaseHelper {
             return courses;
         });
     }
+
     public Task<List<Course>> getAllCoursesAvailable() {
         String collectionPath = COURSES_COLLECTION_NAME;
         CollectionReference coursesEnrolledRef = firestore.collection(collectionPath);
 
         // Create a TaskCompletionSource to handle the asynchronous result
         TaskCompletionSource<List<Course>> taskCompletionSource = new TaskCompletionSource<>();
-
         coursesEnrolledRef.get().addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 QuerySnapshot querySnapshot = task.getResult();
@@ -176,12 +229,12 @@ public class FirebaseHelper {
                         String courseName = document.getString("name");
                         String courseCategory = document.getString("category");
                         String duration = document.getString("duration");
-                        String totalQuizzes = document.getString("totalQuizzes");
+                        int totalQuizzes = document.getLong("totalQuizzes").intValue();
                         String description = document.getString("description");
                         int img = document.getLong("img").intValue();
                         String teacherId = document.getString("Teacher_id");
 
-                        Course enrolledCourse = new Course(courseId, teacherId, courseName, courseCategory, duration, Integer.valueOf(totalQuizzes), description, img);
+                        Course enrolledCourse = new Course(courseId, teacherId, courseName, courseCategory, duration, totalQuizzes, description, img);
                         courses.add(enrolledCourse);
                     }
 
@@ -199,12 +252,12 @@ public class FirebaseHelper {
                 }
             }
         });
-
         return taskCompletionSource.getTask();
     }
+
     public Task<List<Course>> findCoursesByName(String searchTerm) {
         // Get a reference to the "courses_enrolled" collection
-        CollectionReference coursesRef = firestore.collection("courses_enrolled");
+        CollectionReference coursesRef = firestore.collection(COURSES_COLLECTION_NAME);
 
         // Create a query to find courses where the name contains the given search term
         Query query = coursesRef.whereEqualTo("name", searchTerm);
@@ -221,63 +274,34 @@ public class FirebaseHelper {
                 String courseName = document.getString("name");
                 String courseCategory = document.getString("category");
                 String duration = document.getString("duration");
-                String totalQuizzes = document.getString("totalQuizzes");
+                int totalQuizzes = document.getLong("totalQuizzes").intValue();
                 String description = document.getString("description");
                 int img = document.getLong("img").intValue();
                 String teacherId = document.getString("Teacher_id");
 
-                Course enrolledCourse = new Course(courseId, teacherId, courseName, courseCategory, duration, Integer.valueOf(totalQuizzes), description, img);
+                Course enrolledCourse = new Course(courseId, teacherId, courseName, courseCategory, duration, totalQuizzes, description, img);
                 courses.add(enrolledCourse);
             }
 
             return courses;
         });
     }
+
     public Task<DocumentReference> addCourse(Course course) {
         String collectionPath = COURSES_COLLECTION_NAME;
         CollectionReference coursesCreatedRef = firestore.collection(collectionPath);
         return coursesCreatedRef.add(course);
     }
 
-    public Task<Void> enrollStudentInCourse(String studentId, String courseId) {
-        String courseCollectionPath = "/courses/" + courseId + "/StudentEnrolled";
-        CollectionReference courseEnrolledRef = firestore.collection(courseCollectionPath);
-
-        String userCollectionPath = "/users/" + studentId + "/enrolled_in";
-        CollectionReference userEnrolledRef = firestore.collection(userCollectionPath);
-
-        Task<DocumentSnapshot> studentTask = getUserById(studentId);
-        Task<DocumentSnapshot> courseTask = getCourseById(courseId);
-
-        return Tasks.whenAllSuccess(studentTask, courseTask)
-                .continueWithTask(task -> {
-                    DocumentSnapshot studentSnapshot = studentTask.getResult();
-                    DocumentSnapshot courseSnapshot = courseTask.getResult();
-
-                    if (studentSnapshot.exists() && courseSnapshot.exists()) {
-                        WriteBatch batch = firestore.batch();
-                        batch.set(courseEnrolledRef.document(studentId), studentSnapshot.getData());
-                        batch.set(userEnrolledRef.document(courseId), courseSnapshot.getData());
-                        return batch.commit();
-                    } else {
-                        throw new Exception("Student or Course not found.");
-                    }
-                });
+    public Task<DocumentReference> enrollStudentInCourse(String studentId, String courseId) {
+        String courseEnrolledCollectionPath = "course_enrolled";
+        CollectionReference courseEnrolledRef = firestore.collection(courseEnrolledCollectionPath);
+        Map<String, Object> enrollmentData = new HashMap<>();
+        enrollmentData.put("student_id", studentId);
+        enrollmentData.put("course_id", courseId);
+        return courseEnrolledRef.add(enrollmentData);
     }
-    private void addQuizReferenceToCourse(String courseId, DocumentReference quizRef) {
-        coursesCollection.document(courseId)
-                .update("quizzes", FieldValue.arrayUnion(quizRef))
-                .addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(Task<Void> task) {
-                        if (task.isSuccessful()) {
-                            Log.d("Quiz collection from Firebase:", "Quiz reference added to the course document");
-                        } else {
-                            Log.e("Quiz collection from Firebase:", "Error updating course document", task.getException());
-                        }
-                    }
-                });
-    }
+
     public Task<List<Quiz>> getQuizzesByCourseId(String courseId) {
         CollectionReference quizzesRef = FirebaseFirestore.getInstance().collection("quizzes");
         Query query = quizzesRef.whereEqualTo("course_id", courseId);
@@ -317,15 +341,12 @@ public class FirebaseHelper {
         });
     }
 
-    //  Functions to implement
-
     public void storeQuizAttempt(String userId, String courseId, String quizId, int score) {
         Map<String, Object> quizAttemptData = new HashMap<>();
         quizAttemptData.put("user_id", userId);
         quizAttemptData.put("course_id", courseId);
         quizAttemptData.put("quiz_id", quizId);
         quizAttemptData.put("score", score);
-        // Add other quiz attempt data as needed (e.g., timestamp)
 
         quizAttemptsCollection.add(quizAttemptData)
                 .addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
@@ -339,15 +360,6 @@ public class FirebaseHelper {
                     }
                 });
     }
-
-    public Task<Void> deleteCourse(String teacher_id, String courseId) {
-        String courseCollectionPath = "/courses/" + courseId + "/quizzes";
-        String crs_quiz = "/users/" + teacher_id + "/course_created/" + courseId + "/quizzes";
-        DocumentReference courseRef = FirebaseFirestore.getInstance().document(courseCollectionPath);
-        courseRef.delete();
-        DocumentReference courseRef1 = FirebaseFirestore.getInstance().document(crs_quiz);
-        return courseRef1.delete();
-}
 
     public void addQuiz(String Quiz_name, int Total_questions, String courseId, String instructorId, List<Question> questions) {
         Map<String, Object> quizData = new HashMap<>();
@@ -370,21 +382,14 @@ public class FirebaseHelper {
         quizData.put("questions", questionsData); // Add the list of questions to the quizData
 
         quizzesCollection.add(quizData).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
-                    @Override
-                    public void onComplete(Task<DocumentReference> task) {
-                        if (task.isSuccessful()) {
-                            DocumentReference quizRef = task.getResult();
-                        } else {
-                        }
-                    }
-                });
-    }
-
-
-    public void getUserQuizAttempts(String userId, OnCompleteListener<QuerySnapshot> listener) {
-        quizAttemptsCollection.whereEqualTo("user_id", userId)
-                .get()
-                .addOnCompleteListener(listener);
+            @Override
+            public void onComplete(Task<DocumentReference> task) {
+                if (task.isSuccessful()) {
+                    DocumentReference quizRef = task.getResult();
+                } else {
+                }
+            }
+        });
     }
 
     public Task<List<Quiz>> getQuizzesByCourseAndInstructorId(String courseId, String instructorId) {
@@ -422,4 +427,112 @@ public class FirebaseHelper {
         });
     }
 
+    //  Functions to implement
+    public Task<List<Quiz_Attempts>> getQuizAttemptsByUserId(String userId) {
+        CollectionReference quizAttemptsRef = firestore.collection("quiz_attempts");
+
+        // Create a query to fetch documents where "user_id" is equal to the given userId
+        Query query = quizAttemptsRef.whereEqualTo("user_id", userId);
+
+        // Execute the query asynchronously and convert the Task<QuerySnapshot> to Task<List<Quiz_Attempts>>
+        return query.get().continueWith(task -> {
+            List<Quiz_Attempts> quizAttemptsList = new ArrayList<>();
+            if (task.isSuccessful()) {
+                QuerySnapshot querySnapshot = task.getResult();
+                if (querySnapshot != null) {
+                    for (DocumentSnapshot documentSnapshot : querySnapshot.getDocuments()) {
+                        // Convert the document data to your Quiz_Attempts model or read individual fields
+                        String courseId = documentSnapshot.getString("course_id");
+                        String quizId = documentSnapshot.getString("quiz_id");
+                        String score = String.valueOf(documentSnapshot.getLong("score").intValue());
+
+                        Quiz_Attempts quizAttempt = new Quiz_Attempts(courseId, quizId, score, userId);
+                        quizAttemptsList.add(quizAttempt);
+                    }
+                }
+            } else {
+                // Log the exception
+                Exception exception = task.getException();
+                if (exception != null) {
+                    Log.e("Firestore Query Error", "Error: " + exception.getMessage());
+                }
+            }
+            return quizAttemptsList;
+        });
+    }
+
+    public Task<Void> deleteQuiz(String quizId) {
+        // Collection path for quizzes
+        String quizzesCollectionPath = "quizzes";
+
+        // Get the document reference for the quiz using the provided quizId
+        DocumentReference quizRef = firestore.collection(quizzesCollectionPath).document(quizId);
+
+        // Delete the quiz document using the document reference
+        return quizRef.delete();
+    }
+
+    public Task<Void> updateQuiz(String quizId, String quiz_name, int Total_question, List<Question> options) {
+        String quizzesCollectionPath = QUIZ_COLLECTION_NAME;
+        DocumentReference quizRef = firestore.collection(quizzesCollectionPath).document(quizId);
+        Map<String, Object> quizUpdates = new HashMap<>();
+        quizUpdates.put("quiz_name", quiz_name);
+        quizUpdates.put("total_questions", Total_question);
+        quizUpdates.put("questions", options);
+        return quizRef.update(quizUpdates);
+    }
+
+    public Task<List<Quiz_Attempts>> getQuizAttemptsByCourseId(String courseId) {
+        CollectionReference quizAttemptsRef = firestore.collection(QUIZ_ATTEMPT_COLLECTION_NAME);
+
+        Query query = quizAttemptsRef.whereEqualTo("course_id", courseId);
+
+        return query.get().continueWith(task -> {
+            if (task.isSuccessful()) {
+                QuerySnapshot querySnapshot = task.getResult();
+                List<Quiz_Attempts> quizAttemptsList = new ArrayList<>();
+                for (QueryDocumentSnapshot document : querySnapshot) {
+                    String user_id = document.getString("user_id");
+                    String quiz_id = document.getString("quiz_id");
+                    String score = document.getLong("score").toString();
+                    // You can extract other fields from the document as well
+
+                    Quiz_Attempts quizAttempt = new Quiz_Attempts(courseId, quiz_id, score, user_id);
+                    quizAttemptsList.add(quizAttempt);
+                }
+                return quizAttemptsList;
+            } else {
+                // Handle the case when retrieving quiz attempts fails
+                throw task.getException();
+            }
+        });
+    }
+
+    public Task<Quiz> getQuizByID_but_no_Questions(String quizId) {
+        CollectionReference quizzesRef = firestore.collection("quizzes");
+        DocumentReference quizRef = quizzesRef.document(quizId);
+
+        return quizRef.get().continueWith(task -> {
+            if (task.isSuccessful()) {
+                DocumentSnapshot document = task.getResult();
+                if (document.exists()) {
+                    // Convert the document data to your Quiz model or read individual fields
+                    String courseId = document.getString("course_id");
+                    String instructorId = document.getString("instructor_id");
+                    String quizName = document.getString("quiz_name");
+                    int totalQuestions = document.getLong("total_questions").intValue();
+                    List<Question> questions = new ArrayList<>();
+                    // Assuming you have the Quiz model constructor
+                    Quiz quiz = new Quiz(quizId, quizName, totalQuestions, courseId, instructorId, questions);
+                    return quiz;
+                } else {
+                    // Handle the case when the quiz document does not exist
+                    return null;
+                }
+            } else {
+                // Handle the failure case
+                throw task.getException();
+            }
+        });
+    }
 }
