@@ -51,7 +51,6 @@ public class course_leading extends Fragment {
         String dob = sh.getString("dob","");
 
         firebaseHelper = new FirebaseHelper();
-
         RecyclerView course_leading_recycler_view = view.findViewById(R.id.recycler_view_course_leading);
         course_leading_adapter = new Instructor_Course_Leading_Adapter(requireContext(), course_leading, teacher_id);
         course_leading_recycler_view.setLayoutManager(new LinearLayoutManager(requireContext()));
@@ -71,5 +70,10 @@ public class course_leading extends Fragment {
             course_leading_adapter.mData = l.getResult();
             course_leading_adapter.notifyDataSetChanged();
         });
+    }
+    @Override
+    public void onResume() {
+        super.onResume();
+        add_data_to_course_leading();
     }
 }

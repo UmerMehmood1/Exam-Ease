@@ -30,7 +30,7 @@ public class Instructor_Quiz_Fragment extends Fragment {
     private List<Quiz> quizzes;
     private RecyclerView recyclerView;
     FirebaseHelper firebaseHelper;
-
+    QuizAdapterAtLeadingCourse quizAdapterAtLeadingCourse;
 
     public Instructor_Quiz_Fragment(String Title,String course_id) {
         this.Title = Title;
@@ -46,9 +46,13 @@ public class Instructor_Quiz_Fragment extends Fragment {
         recyclerView = view.findViewById(R.id.recycler_view_for_quiz_in_course_enrolled);
         String teacher_id= requireContext().getSharedPreferences("teacher_data",Context.MODE_PRIVATE).getString("id","");
         Toast.makeText(requireContext(), course_id, Toast.LENGTH_SHORT).show();
-        QuizAdapterAtLeadingCourse quizAdapterAtLeadingCourse = new QuizAdapterAtLeadingCourse(requireContext(), quizzes, teacher_id, course_id, Title);
+        quizAdapterAtLeadingCourse = new QuizAdapterAtLeadingCourse(requireContext(), quizzes, teacher_id, course_id, Title);
         recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
         recyclerView.setAdapter(quizAdapterAtLeadingCourse);
+        add_data_to_course_leading();
+        return view;
+    }
+    public void add_data_to_course_leading(){
         firebaseHelper.getQuizzesByCourseId(course_id).addOnCompleteListener(l -> {
             if (l.isSuccessful()) {
                 quizAdapterAtLeadingCourse.mData = l.getResult();
@@ -57,7 +61,10 @@ public class Instructor_Quiz_Fragment extends Fragment {
                 Toast.makeText(requireContext(), "Failed to fetch quizzes", Toast.LENGTH_SHORT).show();
             }
         });
-
-        return view;
+    }
+    @Override
+    public void onResume() {
+        super.onResume();
+        add_data_to_course_leading();
     }
 }

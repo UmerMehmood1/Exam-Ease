@@ -4,6 +4,7 @@ import static android.content.Context.MODE_PRIVATE;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,9 +25,10 @@ import java.util.List;
 
 public class course_available extends Fragment {
     List<Course> available_courses;
-    String id, username, image, badge,dob;
+    String id, username, image, badge,dob, course_id;
     TextView name;
     FirebaseHelper firebaseHelper;
+    Available_Course_Adapter availablecoursesAdapter;
     public course_available() {
     }
 
@@ -44,7 +46,14 @@ public class course_available extends Fragment {
         name = view.findViewById(R.id.username);
         name.setText("Welcome, "+username);
         RecyclerView availablerecycler = view.findViewById(R.id.recycler_view_course_available);
-        Available_Course_Adapter availablecoursesAdapter = new Available_Course_Adapter(requireContext(), available_courses);
+        add_data_to_course_leading();
+        availablecoursesAdapter = new Available_Course_Adapter(requireContext(), available_courses);
+        availablerecycler.setLayoutManager(new GridLayoutManager(requireContext(), 2));
+        availablerecycler.setAdapter(availablecoursesAdapter);
+        add_data_to_course_leading();
+        return view;
+    }
+    public void add_data_to_course_leading(){
         firebaseHelper.getAllCoursesAvailable()
                 .addOnCompleteListener(result -> {
                     if (result.isSuccessful()) {
@@ -55,8 +64,10 @@ public class course_available extends Fragment {
                 .addOnFailureListener(l -> {
                     Toast.makeText(requireContext(), "Check internet connection.", Toast.LENGTH_SHORT).show();
                 });
-        availablerecycler.setLayoutManager(new GridLayoutManager(requireContext(), 2));
-        availablerecycler.setAdapter(availablecoursesAdapter);
-        return view;
+    }
+    @Override
+    public void onResume() {
+        super.onResume();
+        add_data_to_course_leading();
     }
 }

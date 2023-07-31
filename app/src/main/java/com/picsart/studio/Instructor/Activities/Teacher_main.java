@@ -67,8 +67,6 @@ public class Teacher_main extends AppCompatActivity {
                 return true;
             }
         });
-
-        // Set the default selected item (optional)
         btm_bar.setSelectedItemId(R.id.enrolled_courses);
     }
 

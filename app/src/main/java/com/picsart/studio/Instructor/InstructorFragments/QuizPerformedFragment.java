@@ -27,7 +27,7 @@ public class QuizPerformedFragment extends Fragment {
     private RecyclerView recyclerView;
     FirebaseHelper firebaseHelper;
     String course_name, course_id;
-
+    QuizPerformedAdapter quizPerformedAdapter;
     public QuizPerformedFragment(String course_name, String course_id) {
         this.course_name = course_name;
         this.course_id = course_id;
@@ -41,10 +41,13 @@ public class QuizPerformedFragment extends Fragment {
         quizzes = new ArrayList<>();
         firebaseHelper = new FirebaseHelper();
         recyclerView = view.findViewById(R.id.recycler_view_for_quiz_performed_in_course_enrolled);
-        QuizPerformedAdapter quizPerformedAdapter = new QuizPerformedAdapter(requireContext(), quizzes, course_name);
+        quizPerformedAdapter = new QuizPerformedAdapter(requireContext(), quizzes, course_name);
         recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
         recyclerView.setAdapter(quizPerformedAdapter);
-//         Function to get all the quiz Attempts related to quiz id and course_id is to be made
+        add_data_to_course_leading();
+        return view;
+    }
+    public void add_data_to_course_leading(){
         firebaseHelper.getQuizAttemptsByCourseId(course_id).addOnCompleteListener(l -> {
             if (l.isSuccessful()) {
                 quizPerformedAdapter.mData = l.getResult();
@@ -53,6 +56,10 @@ public class QuizPerformedFragment extends Fragment {
                 Log.d("Quizzes at QuizPerformed Fragment:", l.getException().toString());
             }
         });
-        return view;
+    }
+    @Override
+    public void onResume() {
+        super.onResume();
+        add_data_to_course_leading();
     }
 }

@@ -1,5 +1,6 @@
 package com.picsart.studio.Student.StudentFragments;
 
+import android.content.Context;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -23,6 +24,7 @@ public class Student_Quiz_View extends Fragment {
     List<Quiz> quizList;
     String course_id, course_name;
     FirebaseHelper firebaseHelper;
+    QuizAdapter quizAdapter;
     public Student_Quiz_View(String course_id, String course_name) {
         this.course_id = course_id;
         this.course_name = course_name;
@@ -34,9 +36,13 @@ public class Student_Quiz_View extends Fragment {
         firebaseHelper = new FirebaseHelper();
         View view = inflater.inflate(R.layout.student_fragment_quiz_view, container, false);
         recyclerView = view.findViewById(R.id.recycler_view_for_quiz_performed_in_course_enrolled_student);
-        QuizAdapter quizAdapter = new QuizAdapter(requireContext(),quizList,course_id,course_name);
+        quizAdapter = new QuizAdapter(requireContext(),quizList,course_id,course_name);
         recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
         recyclerView.setAdapter(quizAdapter);
+        add_data_to_course_leading();
+        return view;
+    }
+    public void add_data_to_course_leading(){
         firebaseHelper.getQuizzesByCourseId(course_id).addOnCompleteListener(l -> {
             if (l.isSuccessful()) {
                 quizAdapter.mData = l.getResult();
@@ -45,6 +51,10 @@ public class Student_Quiz_View extends Fragment {
                 Toast.makeText(requireContext(), "Failed to fetch quizzes", Toast.LENGTH_SHORT).show();
             }
         });
-        return view;
+    }
+    @Override
+    public void onResume() {
+        super.onResume();
+        add_data_to_course_leading();
     }
 }

@@ -73,6 +73,7 @@ public class MainActivity extends AppCompatActivity {
                         String email = l.getResult().getUser().getEmail();
                         // Check if the user with the same email already exists in Firebase
                         checkUserExists(email, l.getResult().getUser().getDisplayName());
+//                        finish();
                     } else {
                         Toast.makeText(this, "Internet connection is down", Toast.LENGTH_SHORT).show();
                     }
@@ -89,6 +90,7 @@ public class MainActivity extends AppCompatActivity {
         if (user != null && !loginActivityRunning()) {
             Manual_Loggin_Inner manualLogginInner = new Manual_Loggin_Inner(this);
             manualLogginInner.login_using_username_and_password(username, password);
+//            finish();
         }
     }
     public void setSlideShower() {
@@ -100,10 +102,6 @@ public class MainActivity extends AppCompatActivity {
         slider.setImageList(slider_data, ScaleTypes.FIT);
     }
     private boolean loginActivityRunning() {
-        // Check if the login.class activity is running
-        // You can implement this method based on your specific use case
-        // For example, you can use a boolean flag or check the activity stack
-        // Return true if the activity is running, false otherwise.
         return false;
     }
     private void checkUserExists(String email, String displayName) {

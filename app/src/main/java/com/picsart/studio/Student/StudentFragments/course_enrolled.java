@@ -29,7 +29,7 @@ public class course_enrolled extends Fragment {
     String name, id, badge, dob;
     String image;
     FirebaseHelper firebaseHelper;
-
+    Course_Enrolled_Adapter enrolledcoursesAdapter;
     public course_enrolled() {
     }
 
@@ -46,21 +46,25 @@ public class course_enrolled extends Fragment {
         this.dob = sh.getString("dob", "");
 
         RecyclerView enrolledrecycler = view.findViewById(R.id.recycler_view_course_available);
-        Course_Enrolled_Adapter enrolledcoursesAdapter = new Course_Enrolled_Adapter(requireContext(), enrolled_courses);
+        enrolledcoursesAdapter = new Course_Enrolled_Adapter(requireContext(), enrolled_courses);
         enrolledrecycler.setLayoutManager(new GridLayoutManager(requireContext(), 2));
         enrolledrecycler.setAdapter(enrolledcoursesAdapter);
 
         username = view.findViewById(R.id.username);
         username.setText("Welcome, " + name);
+        add_data_to_course_leading();
 
+        return view;
+    }
+    public void add_data_to_course_leading(){
         firebaseHelper.getEnrolledCoursesByStudentId(id).addOnCompleteListener(task -> {
             if (isAdded()) {
                 if (task.isSuccessful()) {
                     if (task.isComplete()){
                         List<Course> enrolledCoursesObjects = task.getResult();
-
                         for (Object obj : enrolledCoursesObjects) {
                             if (obj instanceof Course) {
+                                enrolledcoursesAdapter.mData.clear();
                                 enrolledcoursesAdapter.mData.add((Course) obj);
                             }
                         }
@@ -71,7 +75,10 @@ public class course_enrolled extends Fragment {
                 }
             }
         });
-
-        return view;
+    }
+    @Override
+    public void onResume() {
+        super.onResume();
+        add_data_to_course_leading();
     }
 }

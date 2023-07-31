@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.picsart.studio.DBHelper.FirebaseHelper;
+import com.picsart.studio.Models.Course;
 import com.picsart.studio.Models.Quiz_Attempts;
 import com.picsart.studio.R;
 import com.picsart.studio.Student.Adapter.QuizAdapter;
@@ -25,6 +26,7 @@ public class Student_Quiz_Attempt_Fragment extends Fragment {
     RecyclerView recyclerView;
     List<Quiz_Attempts> quizAttemptsList = new ArrayList<>();
     FirebaseHelper firebaseHelper;
+    QuizAttemptedAdapter quizAdapter;
     public Student_Quiz_Attempt_Fragment() {
     }
 
@@ -35,9 +37,14 @@ public class Student_Quiz_Attempt_Fragment extends Fragment {
         firebaseHelper = new FirebaseHelper();
         View view = inflater.inflate(R.layout.student_fragment_quiz_attempt, container, false);
         recyclerView = view.findViewById(R.id.recycler_view_for_quiz_attempted_at_course_enrolled);
-        QuizAttemptedAdapter quizAdapter = new QuizAttemptedAdapter(requireContext(),quizAttemptsList);
+        quizAdapter = new QuizAttemptedAdapter(requireContext(),quizAttemptsList);
         recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
         recyclerView.setAdapter(quizAdapter);
+        add_data_to_course_leading();
+        return view;
+
+    }
+    public void add_data_to_course_leading(){
         String student_id = requireContext().getSharedPreferences("student_data", Context.MODE_PRIVATE).getString("id","");
         firebaseHelper.getQuizAttemptsByUserId(student_id).addOnCompleteListener(l -> {
             if (l.isSuccessful()) {
@@ -47,7 +54,10 @@ public class Student_Quiz_Attempt_Fragment extends Fragment {
                 Toast.makeText(requireContext(), "Failed to fetch quizzes", Toast.LENGTH_SHORT).show();
             }
         });
-        return view;
-
+    }
+    @Override
+    public void onResume() {
+        super.onResume();
+        add_data_to_course_leading();
     }
 }

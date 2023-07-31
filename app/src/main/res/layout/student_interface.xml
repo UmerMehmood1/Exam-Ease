@@ -14,7 +14,7 @@
         android:background="#FFFFFF"
         android:elevation="4dp"
         app:cardCornerRadius="25dp"
-        app:cardElevation="15dp">
+        app:cardElevation="3dp">
 
 
         <androidx.fragment.app.FragmentContainerView
