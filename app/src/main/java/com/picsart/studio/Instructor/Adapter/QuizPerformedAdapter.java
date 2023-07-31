@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.picsart.studio.DBHelper.FirebaseHelper;
 import com.picsart.studio.Models.Quiz;
 import com.picsart.studio.Models.Quiz_Attempts;
+import com.picsart.studio.Models.User;
 import com.picsart.studio.R;
 import java.util.List;
 
@@ -52,7 +53,18 @@ public class QuizPerformedAdapter extends RecyclerView.Adapter<QuizPerformedAdap
             }
         });
         holder.score.setText("Scores: "+mData.get(position).getScore());
-        holder.user_id.setText(String.valueOf(mData.get(position).getUser_id()));
+        firebaseHelper.getUserByID(mData.get(position).getUser_id()).addOnCompleteListener(l->{
+            if (l.isComplete() && l.isSuccessful()){
+                User user = l.getResult();
+                if (user != null) {
+                    holder.user_id.setText(user.getName());
+                } else {
+                    holder.user_id.setText("Quiz Not Found");
+                }
+            } else {
+                holder.user_id.setText("Error Fetching Quiz");
+            }
+        });
     }
 
     public void setData(List<Quiz_Attempts> enrolled_courses) {

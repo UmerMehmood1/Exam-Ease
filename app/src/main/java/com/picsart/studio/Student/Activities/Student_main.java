@@ -61,11 +61,15 @@ public class Student_main extends AppCompatActivity {
         // Set the default selected item (optional)
         btm_bar.setSelectedItemId(R.id.enrolled_courses);
     }
-
     public void loadFrag(Fragment fragment) {
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.setCustomAnimations(R.anim.fade_in, R.anim.fade_out, R.anim.fade_in, R.anim.fade_out);
         fragmentTransaction.replace(R.id.student_fragement_viewer, fragment);
         fragmentTransaction.commit();
+    }
+    @Override
+    public void onBackPressed(){
+        super.onBackPressed();
+        finishAffinity();
     }
 }

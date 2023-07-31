@@ -76,4 +76,9 @@ public class Teacher_main extends AppCompatActivity {
         fragmentTransaction.replace(R.id.instructor_fragement_viewer, fragment);
         fragmentTransaction.commit();
     }
+    @Override
+    public void onBackPressed(){
+        super.onBackPressed();
+        finishAffinity();
+    }
 }

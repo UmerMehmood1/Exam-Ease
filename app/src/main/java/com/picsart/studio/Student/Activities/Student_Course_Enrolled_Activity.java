@@ -12,6 +12,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager2.widget.ViewPager2;
 
+import com.google.android.material.tabs.TabLayout;
+import com.google.android.material.tabs.TabLayoutMediator;
 import com.picsart.studio.Instructor.Adapter.InstructorViewPagerAdapter;
 import com.picsart.studio.Instructor.Adapter.Instructor_Course_Leading_Adapter;
 import com.picsart.studio.Instructor.InstructorFragments.Instructor_Quiz_Fragment;
@@ -68,6 +70,18 @@ public class Student_Course_Enrolled_Activity extends AppCompatActivity {
 
         myViewPager2.setOrientation(ViewPager2.ORIENTATION_HORIZONTAL);
         myViewPager2.setAdapter(myAdapter);
+
+        TabLayout tabLayout = findViewById(R.id.tabLayout); // Make sure you have the correct ID here
+        new TabLayoutMediator(tabLayout, myViewPager2,
+                (tab, position) -> {
+                    // Set the tab text here based on the position
+                    if (position == 0) {
+                        tab.setText("Quizzes");
+                    } else if (position == 1) {
+                        tab.setText("Results");
+                    }
+                }
+        ).attach();
 
         tvtitle.setText(Title);
         tvdescription.setText(Description);

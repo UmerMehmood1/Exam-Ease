@@ -51,6 +51,28 @@ public class FirebaseHelper {
         quizAttemptsCollection = firestore.collection(QUIZ_ATTEMPT_COLLECTION_NAME);
         userEnrolledCollection = firestore.collection(USER_ENROLLED_IN_COURSE_COLLECTION_NAME);
     }
+    public Task<User> getUserByID(String user_id) {
+        // Get a reference to the user document with the provided user_id
+        DocumentReference userRef = usersCollection.document(user_id);
+
+        return userRef.get()
+                .continueWith(task -> {
+                    if (task.isSuccessful()) {
+                        DocumentSnapshot document = task.getResult();
+                        if (document.exists()) {
+                            // Deserialize the document data into the User class
+                            User user = document.toObject(User.class);
+                            return user;
+                        } else {
+                            // If the document doesn't exist, handle the case accordingly
+                            return null;
+                        }
+                    } else {
+                        // Handle any errors that may occur during the retrieval
+                        return null;
+                    }
+                });
+    }
     public Task<Void> updateCourse(String teacher_id, String courseId, Course course) {
         String collectionPath = "/users/" + teacher_id + "/course_created/" + courseId;
         DocumentReference courseRef = FirebaseFirestore.getInstance().document(collectionPath);
@@ -121,7 +143,7 @@ public class FirebaseHelper {
                 });
     }
     private Task<Course> getCourseById(String courseId, Course course) {
-        String coursesCollectionPath = "courses";
+        String coursesCollectionPath = COURSES_COLLECTION_NAME;
 
         // Get the document with the provided course ID
         return firestore.collection(coursesCollectionPath).document(courseId).get()

@@ -14,6 +14,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.tabs.TabLayout;
+import com.google.android.material.tabs.TabLayoutMediator;
 import com.picsart.studio.DBHelper.FirebaseHelper;
 import com.picsart.studio.Instructor.Adapter.InstructorViewPagerAdapter;
 import com.picsart.studio.Instructor.Adapter.QuizAdapterAtLeadingCourse;
@@ -80,6 +82,17 @@ public class CourseQuizzes extends AppCompatActivity {
 
         myViewPager2.setAdapter(myAdapter);
 
+        TabLayout tabLayout = findViewById(R.id.tabLayout); // Make sure you have the correct ID here
+        new TabLayoutMediator(tabLayout, myViewPager2,
+                (tab, position) -> {
+                    // Set the tab text here based on the position
+                    if (position == 0) {
+                        tab.setText("Quizzes");
+                    } else if (position == 1) {
+                        tab.setText("Results");
+                    }
+                }
+        ).attach();
         floating_button_add_quiz.setOnClickListener(l->{
             Intent intent1 = new Intent(this, AddQuiz.class);
             intent1.putExtra("course_id",course_id);
