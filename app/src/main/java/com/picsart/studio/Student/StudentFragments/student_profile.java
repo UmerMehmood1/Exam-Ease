@@ -15,6 +15,8 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.ktx.Firebase;
 import com.picsart.studio.Login_and_sign_up.Activities.login;
 import com.picsart.studio.R;
 public class student_profile extends Fragment {
@@ -56,9 +58,10 @@ public class student_profile extends Fragment {
                 });
         Log_out.setOnClickListener(l->{
             Intent intent = new Intent(requireContext(), login.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
             getActivity().startActivity(intent);
             getActivity().finish();
+            FirebaseAuth.getInstance().signOut();
         });
         return view;
     }

@@ -14,6 +14,8 @@ import android.widget.TextView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.picsart.studio.Login_and_sign_up.Activities.login;
 import com.picsart.studio.R;
 import com.picsart.studio.Student.StudentFragments.course_enrolled;
@@ -60,9 +62,10 @@ public class Teacher_Profile_Fragment extends Fragment {
         });
         Log_out.setOnClickListener(l->{
             Intent intent = new Intent(requireContext(), login.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
             getActivity().startActivity(intent);
             getActivity().finish();
+            FirebaseAuth.getInstance().signOut();
         });
         return view;
     }
