@@ -68,7 +68,7 @@ public class login extends AppCompatActivity {
                         }
                     })
                     .addOnFailureListener(e -> {
-                        // Handle error if the query fails
+                        Toast.makeText(this, "Check internet connection", Toast.LENGTH_SHORT).show();
                     });
         });
     }

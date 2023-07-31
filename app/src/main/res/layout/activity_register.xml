@@ -29,13 +29,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_margin="30dp"
+        android:layout_margin="20dp"
         android:elevation="25dp"
         app:cardCornerRadius="25dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.82"
         tools:context=".Login_and_sign_up.Activities.Register">
 
         <LinearLayout
@@ -72,6 +73,7 @@
                     android:id="@+id/dob"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:editable="false"
                     android:ems="10"
                     android:hint="DD-MM-YYYY"
                     android:inputType="text"
@@ -113,6 +115,39 @@
 
             </com.google.android.material.textfield.TextInputLayout>
 
+            <TextView
+                android:id="@+id/textView2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="I am"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <RadioGroup
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+
+                    <RadioButton
+                        android:id="@+id/isStudent"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Student" />
+
+                    <RadioButton
+                        android:id="@+id/isTeacher"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Teacher" />
+                </RadioGroup>
+            </LinearLayout>
+
             <Button
                 android:id="@+id/Register_btn"
                 android:layout_width="match_parent"
@@ -125,12 +160,6 @@
 
 
         </LinearLayout>
-
-        <!--    this.name = name;-->
-        <!--    this.img = img;-->
-        <!--    this.badge = badge;-->
-        <!--    this.dob = dob;-->
-        <!--    this.enrolledCourseId = enrolledCourseId;-->
 
 
     </androidx.cardview.widget.CardView>
