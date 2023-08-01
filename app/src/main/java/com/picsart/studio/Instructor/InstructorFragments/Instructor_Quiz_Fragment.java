@@ -45,7 +45,6 @@ public class Instructor_Quiz_Fragment extends Fragment {
         firebaseHelper = new FirebaseHelper();
         recyclerView = view.findViewById(R.id.recycler_view_for_quiz_in_course_enrolled);
         String teacher_id= requireContext().getSharedPreferences("teacher_data",Context.MODE_PRIVATE).getString("id","");
-        Toast.makeText(requireContext(), course_id, Toast.LENGTH_SHORT).show();
         quizAdapterAtLeadingCourse = new QuizAdapterAtLeadingCourse(requireContext(), quizzes, teacher_id, course_id, Title);
         recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
         recyclerView.setAdapter(quizAdapterAtLeadingCourse);

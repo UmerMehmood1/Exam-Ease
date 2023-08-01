@@ -42,7 +42,7 @@ public class Course_Detail extends AppCompatActivity {
             firebaseHelper.enrollStudentInCourse(id,course_id)
                     .addOnCompleteListener(result -> {
                         if (result.isSuccessful()) {
-                            Toast.makeText(this, "Enrolled Successfully", Toast.LENGTH_SHORT).show();
+                            finish();
                         }
                     })
                     .addOnFailureListener(listener -> {

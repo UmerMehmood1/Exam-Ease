@@ -40,6 +40,14 @@ public class QuizAdapter extends RecyclerView.Adapter<QuizAdapter.MyViewHolder> 
         holder.quiz_title.setText(mData.get(position).getQuizName());
         holder.course_title_at_quiz_card.setText(Course_name);
         holder.total_questions.setText(String.valueOf(mData.get(position).getTotalQuestions()));
+        holder.start_quiz_at_card.setOnClickListener(l->{
+            Intent intent = new Intent(context, QuizActivity.class);
+            intent.putExtra("course_id", mData.get(position).getCourseId());
+            intent.putExtra("quiz_id", mData.get(position).getQuizId());
+            intent.putExtra("selectedQuiz", mData.get(position));
+            context.startActivity(intent);
+
+        });
         holder.cardView.setOnClickListener(l->{
             Intent intent = new Intent(context, QuizActivity.class);
             intent.putExtra("course_id", mData.get(position).getCourseId());
@@ -47,15 +55,14 @@ public class QuizAdapter extends RecyclerView.Adapter<QuizAdapter.MyViewHolder> 
             intent.putExtra("selectedQuiz", mData.get(position));
             context.startActivity(intent);
         });
-
     }
     public void setData(List<Quiz> enrolled_courses) {
         if (this.mData == null) {
-            this.mData = new ArrayList<>(); // Create a new list if mData is null
+            this.mData = new ArrayList<>();
         } else {
-            this.mData.clear(); // Clear the existing data
+            this.mData.clear();
         }
-        this.mData.addAll(enrolled_courses); // Add the new data
+        this.mData.addAll(enrolled_courses);
         notifyDataSetChanged();;
     }
     @Override

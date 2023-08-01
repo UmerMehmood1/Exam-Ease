@@ -83,8 +83,6 @@ public class login extends AppCompatActivity {
             login.login_using_username_and_password(name.getText().toString(),pass.getText().toString());
         });
     }
-
-
 }
 
 

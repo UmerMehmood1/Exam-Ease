@@ -13,11 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.firestore.QuerySnapshot;
 import com.picsart.studio.Instructor.Adapter.Instructor_Course_Leading_Adapter;
 import com.picsart.studio.DBHelper.FirebaseHelper;
 import com.picsart.studio.Models.Course;
@@ -64,7 +60,6 @@ public class course_leading extends Fragment {
     public Instructor_Course_Leading_Adapter getAdapter(){
         return course_leading_adapter;
     }
-
     public void add_data_to_course_leading(){
         firebaseHelper.getCoursesByTeacherId(teacher_id).addOnCompleteListener(l->{
             course_leading_adapter.mData = l.getResult();

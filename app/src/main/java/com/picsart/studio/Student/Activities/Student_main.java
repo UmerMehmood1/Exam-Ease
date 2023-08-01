@@ -13,12 +13,17 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.bottomnavigation.LabelVisibilityMode;
 import com.google.android.material.navigation.NavigationBarView;
 import com.picsart.studio.Student.StudentFragments.course_enrolled;
 import com.picsart.studio.Student.StudentFragments.course_available;
 import com.picsart.studio.Student.StudentFragments.student_profile;
 import com.picsart.studio.Student.StudentFragments.student_search;
 import com.picsart.studio.R;
+
+import kotlin.Unit;
+import kotlin.jvm.functions.Function1;
+import com.etebarian.meowbottomnavigation.MeowBottomNavigation;
 
 public class Student_main extends AppCompatActivity {
 
@@ -39,27 +44,27 @@ public class Student_main extends AppCompatActivity {
                     .commit();
         }
 
-        BottomNavigationView btm_bar = findViewById(R.id.btm_nav_bar);
-
-        btm_bar.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
-            @SuppressLint("NonConstantResourceId")
+        MeowBottomNavigation btm_bar = findViewById(R.id.btm_nav_bar);
+        btm_bar.add(new MeowBottomNavigation.Model(1, R.drawable.baseline_home_24));
+        btm_bar.add(new MeowBottomNavigation.Model(2, R.drawable.available_courses));
+        btm_bar.add(new MeowBottomNavigation.Model(3, R.drawable.baseline_search_24));
+        btm_bar.add(new MeowBottomNavigation.Model(4, R.drawable.baseline_account_circle_24));
+        btm_bar.setOnShowListener(new Function1<MeowBottomNavigation.Model, Unit>() {
             @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                if (item.getItemId() == R.id.enrolled_courses) {
+            public Unit invoke(MeowBottomNavigation.Model model) {
+                if (model.getId() == 1) {
                     loadFrag(new course_enrolled());
-                } else if (item.getItemId() == R.id.available_courses) {
+                } else if (model.getId() == 2) {
                     loadFrag(new course_available());
-                } else if (item.getItemId() == R.id.search) {
+                } else if (model.getId() == 3) {
                     loadFrag(new student_search());
-                } else if (item.getItemId() == R.id.profile) {
+                } else if (model.getId() == 4) {
                     loadFrag(new student_profile());
                 }
-                return true;
+            return null;
             }
         });
-
-        // Set the default selected item (optional)
-        btm_bar.setSelectedItemId(R.id.enrolled_courses);
+        btm_bar.show(1, true);
     }
     public void loadFrag(Fragment fragment) {
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();

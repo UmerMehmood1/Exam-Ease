@@ -4,6 +4,7 @@
     android:id="@+id/quiz_performed_card"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_margin="10dp"
     app:cardCornerRadius="10dp">
 
     <LinearLayout
@@ -15,7 +16,9 @@
         <androidx.cardview.widget.CardView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:cardCornerRadius="10dp">
+            app:cardCornerRadius="10dp"
+            app:cardElevation="0dp"
+            app:cardMaxElevation="0dp">
 
             <ImageView
                 android:id="@+id/imageView"

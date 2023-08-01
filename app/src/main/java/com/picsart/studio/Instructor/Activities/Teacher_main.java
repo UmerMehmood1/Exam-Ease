@@ -13,15 +13,21 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
+import com.etebarian.meowbottomnavigation.MeowBottomNavigation;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationBarView;
 import com.picsart.studio.Instructor.InstructorFragments.Teacher_Profile_Fragment;
 import com.picsart.studio.Instructor.InstructorFragments.Teacher_Search_Fragment;
 import com.picsart.studio.Instructor.InstructorFragments.course_leading;
+import com.picsart.studio.Student.StudentFragments.course_available;
+import com.picsart.studio.Student.StudentFragments.course_enrolled;
 import com.picsart.studio.Student.StudentFragments.student_profile;
 import com.picsart.studio.Student.StudentFragments.student_search;
 import com.picsart.studio.R;
+
+import kotlin.Unit;
+import kotlin.jvm.functions.Function1;
 
 public class Teacher_main extends AppCompatActivity {
 
@@ -35,39 +41,39 @@ public class Teacher_main extends AppCompatActivity {
         String image = sh.getString("img","");
         String badge = sh.getString("badge","");
         String dob = sh.getString("dob","");
-        Toast.makeText(this, teacher_id, Toast.LENGTH_SHORT).show();
-
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.instructor_fragement_viewer, new course_leading())
                     .commit();
         }
         FloatingActionButton add_course = findViewById(R.id.add_course_fb);
-        BottomNavigationView btm_bar = findViewById(R.id.instructor_btm_nav_bar);
         add_course.setOnClickListener(l->{
             Intent intent = new Intent(this, Add_Course.class);
             intent.putExtra("id", teacher_id);
             startActivity(intent);
         });
-
-        btm_bar.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
-            @SuppressLint("NonConstantResourceId")
+        MeowBottomNavigation btm_bar = findViewById(R.id.instructor_btm_nav_bar);
+        btm_bar.add(new MeowBottomNavigation.Model(1, R.drawable.baseline_home_24));
+        btm_bar.add(new MeowBottomNavigation.Model(2, R.drawable.baseline_search_24));
+        btm_bar.add(new MeowBottomNavigation.Model(3, R.drawable.baseline_account_circle_24));
+        btm_bar.setOnShowListener(new Function1<MeowBottomNavigation.Model, Unit>() {
             @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                if (item.getItemId() == R.id.courses_leading) {
+            public Unit invoke(MeowBottomNavigation.Model model) {
+                if (model.getId() == 1) {
                     loadFrag(new course_leading());
                     add_course.setVisibility(View.VISIBLE);
-                } else if (item.getItemId() == R.id.search) {
-                    add_course.setVisibility(View.GONE);
+                } else if (model.getId() == 2) {
                     loadFrag(new Teacher_Search_Fragment());
-                } else if (item.getItemId() == R.id.profile) {
                     add_course.setVisibility(View.GONE);
+                } else if (model.getId() == 3) {
                     loadFrag(new Teacher_Profile_Fragment());
+                    add_course.setVisibility(View.GONE);
                 }
-                return true;
+                return null;
             }
         });
-        btm_bar.setSelectedItemId(R.id.enrolled_courses);
+        btm_bar.show(1, true);
+
     }
 
     public void loadFrag(Fragment fragment) {

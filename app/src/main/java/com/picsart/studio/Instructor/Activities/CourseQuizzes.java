@@ -11,7 +11,6 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.widget.ImageButton;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
@@ -33,7 +32,6 @@ public class CourseQuizzes extends AppCompatActivity {
     String name, category, description, duration, course_id, teacher_id;
     int course_img;
     TextView course_title,course_category, course_description;
-    RecyclerView recyclerView;
     List<Quiz> quizList;
     ImageButton back;
     FirebaseHelper firebaseHelper;
@@ -72,32 +70,23 @@ public class CourseQuizzes extends AppCompatActivity {
         myViewPager2 = findViewById(R.id.viewpager_at_quiz_view);
 
         myAdapter = new InstructorViewPagerAdapter(getSupportFragmentManager(), getLifecycle());
-
-        // add Fragments in your ViewPagerFragmentAdapter class
         myAdapter.addFragment(new Instructor_Quiz_Fragment(name, course_id));
         myAdapter.addFragment(new QuizPerformedFragment(name, course_id));
-
-        // set Orientation in your ViewPager2
         myViewPager2.setOrientation(ViewPager2.ORIENTATION_HORIZONTAL);
-
         myViewPager2.setAdapter(myAdapter);
 
-        TabLayout tabLayout = findViewById(R.id.tabLayout); // Make sure you have the correct ID here
-        new TabLayoutMediator(tabLayout, myViewPager2,
-                (tab, position) -> {
-                    // Set the tab text here based on the position
+        TabLayout tabLayout = findViewById(R.id.tabLayout);
+        new TabLayoutMediator(tabLayout, myViewPager2, (tab, position) -> {
                     if (position == 0) {
                         tab.setText("Quizzes");
                     } else if (position == 1) {
                         tab.setText("Results");
                     }
-                }
-        ).attach();
+                }).attach();
         floating_button_add_quiz.setOnClickListener(l->{
             Intent intent1 = new Intent(this, AddQuiz.class);
             intent1.putExtra("course_id",course_id);
             startActivity(intent1);
         });
-
     }
 }

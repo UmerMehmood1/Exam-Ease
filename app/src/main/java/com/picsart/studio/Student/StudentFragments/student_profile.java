@@ -17,6 +17,7 @@ import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.ktx.Firebase;
+import com.picsart.studio.AboutActivity;
 import com.picsart.studio.Login_and_sign_up.Activities.login;
 import com.picsart.studio.R;
 public class student_profile extends Fragment {
@@ -57,11 +58,15 @@ public class student_profile extends Fragment {
                             .commit();
                 });
         Log_out.setOnClickListener(l->{
-            Intent intent = new Intent(requireContext(), login.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
-            getActivity().startActivity(intent);
-            getActivity().finish();
+            SharedPreferences sharedPreferences = getActivity().getSharedPreferences("student_data", Context.MODE_PRIVATE);
+            SharedPreferences.Editor teacher_editor = sharedPreferences.edit();
+            teacher_editor.clear();
+            teacher_editor.apply();
+            getActivity().finishAffinity();
             FirebaseAuth.getInstance().signOut();
+        });
+        about.setOnClickListener(l->{
+            startActivity(new Intent(requireContext(), AboutActivity.class));
         });
         return view;
     }

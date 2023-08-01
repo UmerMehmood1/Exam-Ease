@@ -50,7 +50,6 @@ public class Student_Course_Enrolled_Activity extends AppCompatActivity {
         Title = intent.getStringExtra("content_name");
         Description = intent.getStringExtra("content_description");
         image = intent.getIntExtra("Content_type_img", 0);
-        Toast.makeText(this, course_id, Toast.LENGTH_SHORT).show();
         tvtitle = findViewById(R.id.txttitle);
         tvdescription = findViewById(R.id.txtDesc);
         tvcategory = findViewById(R.id.txtCat);

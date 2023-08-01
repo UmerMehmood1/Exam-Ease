@@ -1,7 +1,6 @@
 package com.picsart.studio.DBHelper;
 
 import android.util.Log;
-
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.TaskCompletionSource;
@@ -18,29 +17,25 @@ import com.picsart.studio.Models.Question;
 import com.picsart.studio.Models.Quiz;
 import com.picsart.studio.Models.Quiz_Attempts;
 import com.picsart.studio.Models.User;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class FirebaseHelper {
-
-    // Collection names
     private static final String COURSES_COLLECTION_NAME = "courses";
     private static final String CONTENTS_COLLECTION_NAME = "contents";
     private static final String USERS_COLLECTION_NAME = "users";
     private static final String QUIZ_COLLECTION_NAME = "quizzes";
     private static final String QUIZ_ATTEMPT_COLLECTION_NAME = "quiz_attempts";
     private static final String USER_ENROLLED_IN_COURSE_COLLECTION_NAME = "course_enrolled";
-    private FirebaseFirestore firestore;
-    private CollectionReference coursesCollection;
+    private final FirebaseFirestore firestore;
+    private final CollectionReference coursesCollection;
     private CollectionReference contentsCollection;
     private CollectionReference usersCollection;
     private CollectionReference quizzesCollection;
     private CollectionReference quizAttemptsCollection;
     private CollectionReference userEnrolledCollection;
-
     public FirebaseHelper() {
         firestore = FirebaseFirestore.getInstance();
         coursesCollection = firestore.collection(COURSES_COLLECTION_NAME);
@@ -109,7 +104,7 @@ public class FirebaseHelper {
                             if (courseId != null) {
                                 Course course = new Course();
                                 course.setId(document.getId());
-                                Task<Course> c = getCourseById(courseId, course);
+                                Task<Course> c = getCourseById(courseId);
                                 courseTasks.add(c);
                             }
                         }
@@ -120,7 +115,7 @@ public class FirebaseHelper {
                     }
                 });
     }
-    private Task<Course> getCourseById(String courseId, Course course) {
+    private Task<Course> getCourseById(String courseId) {
         String coursesCollectionPath = COURSES_COLLECTION_NAME;
         return firestore.collection(coursesCollectionPath).document(courseId).get()
                 .continueWith(task -> {
@@ -231,11 +226,23 @@ public class FirebaseHelper {
     public Task<DocumentReference> enrollStudentInCourse(String studentId, String courseId) {
         String courseEnrolledCollectionPath = "course_enrolled";
         CollectionReference courseEnrolledRef = firestore.collection(courseEnrolledCollectionPath);
-        Map<String, Object> enrollmentData = new HashMap<>();
-        enrollmentData.put("student_id", studentId);
-        enrollmentData.put("course_id", courseId);
-        return courseEnrolledRef.add(enrollmentData);
+
+        Query query = courseEnrolledRef
+                .whereEqualTo("student_id", studentId)
+                .whereEqualTo("course_id", courseId);
+
+        return query.get().continueWithTask(task -> {
+            if (task.isSuccessful() && !task.getResult().isEmpty()) {
+                return Tasks.forResult(null);
+            } else {
+                Map<String, Object> enrollmentData = new HashMap<>();
+                enrollmentData.put("student_id", studentId);
+                enrollmentData.put("course_id", courseId);
+                return courseEnrolledRef.add(enrollmentData);
+            }
+        });
     }
+
     public Task<List<Quiz>> getQuizzesByCourseId(String courseId) {
         CollectionReference quizzesRef = FirebaseFirestore.getInstance().collection("quizzes");
         Query query = quizzesRef.whereEqualTo("course_id", courseId);
@@ -374,7 +381,7 @@ public class FirebaseHelper {
                     return null;
                 }
             } else {
-                throw task.getException();
+                return null;
             }
         });
     }

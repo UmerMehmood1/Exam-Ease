@@ -71,9 +71,7 @@ public class MainActivity extends AppCompatActivity {
                 FirebaseAuth.getInstance().signInWithCredential(credential).addOnCompleteListener(l -> {
                     if (l.isSuccessful()) {
                         String email = l.getResult().getUser().getEmail();
-                        // Check if the user with the same email already exists in Firebase
                         checkUserExists(email, l.getResult().getUser().getDisplayName());
-//                        finish();
                     } else {
                         Toast.makeText(this, "Internet connection is down", Toast.LENGTH_SHORT).show();
                     }
@@ -90,7 +88,6 @@ public class MainActivity extends AppCompatActivity {
         if (user != null && !loginActivityRunning()) {
             Manual_Loggin_Inner manualLogginInner = new Manual_Loggin_Inner(this);
             manualLogginInner.login_using_username_and_password(username, password);
-//            finish();
         }
     }
     public void setSlideShower() {
@@ -105,9 +102,6 @@ public class MainActivity extends AppCompatActivity {
         return false;
     }
     private void checkUserExists(String email, String displayName) {
-        // Query Firebase to check if the user already exists based on the email
-        // For example, you can use Firebase's Firestore or Realtime Database for this check
-        // Here, I'm assuming you are using Firestore
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         CollectionReference usersCollection = db.collection("users");
         Query query = usersCollection.whereEqualTo("password", email);
@@ -115,7 +109,6 @@ public class MainActivity extends AppCompatActivity {
             if (task.isSuccessful()) {
                 boolean userExists = !task.getResult().isEmpty();
                 if (!userExists) {
-                    // If the user does not exist, add the data to Firebase
                     firebaseHelper.addUser(new User(displayName, "2131165352", "Beginner", "00-00-0000", email, "Student"));
                     username = displayName;
                     password = email;
@@ -123,7 +116,6 @@ public class MainActivity extends AppCompatActivity {
                     manualLogginInner.login_using_username_and_password(username, password);
                     Toast.makeText(this, "Username is " + displayName + " and password is your email i.e. " + email, Toast.LENGTH_SHORT).show();
                 } else {
-                    // If the user already exists, simply proceed with the login
                     username = displayName;
                     password = email;
                     Manual_Loggin_Inner manualLogginInner = new Manual_Loggin_Inner(this);

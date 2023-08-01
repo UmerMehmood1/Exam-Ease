@@ -35,7 +35,6 @@ public class QuizAdapterAtLeadingCourse extends RecyclerView.Adapter<QuizAdapter
             this.teacher_id = teacher_id;
             this.course_name = course_name;
         }
-
         @Override
         public QuizAdapterAtLeadingCourse.MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             View view = LayoutInflater.from(context).inflate(R.layout.instructor_quiz_cardview,parent,false);

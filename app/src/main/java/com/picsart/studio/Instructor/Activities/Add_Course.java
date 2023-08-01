@@ -27,7 +27,6 @@ public class Add_Course extends AppCompatActivity {
         setContentView(R.layout.instructor_course_add_activity);
 
         String teacher_id = getSharedPreferences("teacher_data",MODE_PRIVATE).getString("id","");
-        Toast.makeText(this, teacher_id, Toast.LENGTH_SHORT).show();
         title = findViewById(R.id.course_name_at_add_course);
         category = findViewById(R.id.course_category_at_add_course);
         duration = findViewById(R.id.course_estimated_duration_at_add_course);
