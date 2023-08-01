@@ -35,7 +35,7 @@ public class UpdateCourseActivity extends AppCompatActivity {
         teacher_id = getIntent().getStringExtra("teacher_id");
         Update_Course.setOnClickListener(l->{
             firebaseHelper = new FirebaseHelper();
-            firebaseHelper.updateCourse(teacher_id, Courseid, new Course(title.getText().toString(), category.getText().toString(), duration.getText().toString(),Integer.parseInt(t_quiz.getText().toString()), description.getText().toString(), R.drawable.available_courses,teacher_id))
+            firebaseHelper.updateCourse(Courseid, new Course(title.getText().toString(), category.getText().toString(), duration.getText().toString(),Integer.parseInt(t_quiz.getText().toString()), description.getText().toString(), R.drawable.available_courses,teacher_id))
                     .addOnCompleteListener(task -> {
                         if (task.isSuccessful()) {
                             Toast.makeText(UpdateCourseActivity.this, "Course Added Succesfully", Toast.LENGTH_SHORT).show();
