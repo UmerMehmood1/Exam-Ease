@@ -61,10 +61,10 @@ public class course_enrolled extends Fragment {
             if (isAdded()) {
                 if (task.isSuccessful()) {
                     if (task.isComplete()){
+                        enrolledcoursesAdapter.mData.clear();
                         List<Course> enrolledCoursesObjects = task.getResult();
                         for (Object obj : enrolledCoursesObjects) {
                             if (obj instanceof Course) {
-                                enrolledcoursesAdapter.mData.clear();
                                 enrolledcoursesAdapter.mData.add((Course) obj);
                             }
                         }

@@ -1,6 +1,7 @@
 package com.picsart.studio.DBHelper;
 
 import android.util.Log;
+import java.util.concurrent.CompletableFuture;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.TaskCompletionSource;
@@ -21,6 +22,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class FirebaseHelper {
     private static final String COURSES_COLLECTION_NAME = "courses";
@@ -92,22 +94,23 @@ public class FirebaseHelper {
     }
     public Task<List<Course>> getEnrolledCoursesByStudentId(String studentId) {
         String courseEnrolledCollectionPath = "course_enrolled";
-        List<Task<Course>> courseTasks = new ArrayList<>();
+
         return firestore.collection(courseEnrolledCollectionPath)
                 .whereEqualTo("student_id", studentId)
                 .get()
                 .continueWithTask(task -> {
                     if (task.isSuccessful()) {
-                        QuerySnapshot querySnapshot = task.getResult();
-                        for (DocumentSnapshot document : querySnapshot.getDocuments()) {
+                        QuerySnapshot querySnapshot = task.getResult(); // Get the QuerySnapshot
+                        List<DocumentSnapshot> documents = querySnapshot.getDocuments(); // Get all documents
+
+                        List<Task<Course>> courseTasks = new ArrayList<>();
+                        for (DocumentSnapshot document : documents) {
                             String courseId = document.getString("course_id");
                             if (courseId != null) {
-                                Course course = new Course();
-                                course.setId(document.getId());
-                                Task<Course> c = getCourseById(courseId);
-                                courseTasks.add(c);
+                                courseTasks.add(getCourseById(courseId));
                             }
                         }
+                        // Use Tasks.whenAllSuccess to wait for all course tasks to complete
                         return Tasks.whenAllSuccess(courseTasks);
                     } else {
                         Log.e("Firestore Error", "Error fetching enrolled courses", task.getException());
@@ -115,6 +118,8 @@ public class FirebaseHelper {
                     }
                 });
     }
+
+
     private Task<Course> getCourseById(String courseId) {
         String coursesCollectionPath = COURSES_COLLECTION_NAME;
         return firestore.collection(coursesCollectionPath).document(courseId).get()
@@ -309,19 +314,18 @@ public class FirebaseHelper {
         quizData.put("questions", questionsData); // Add the list of questions to the quizData
         quizzesCollection.add(quizData);
     }
-    public Task<List<Quiz_Attempts>> getQuizAttemptsByUserId(String userId) {
+    public Task<List<Quiz_Attempts>> getQuizAttemptsByUserId(String userId, String course_id) {
         CollectionReference quizAttemptsRef = firestore.collection("quiz_attempts");
-        Query query = quizAttemptsRef.whereEqualTo("user_id", userId);
+        Query query = quizAttemptsRef.whereEqualTo("user_id", userId).whereEqualTo("course_id", course_id);
         return query.get().continueWith(task -> {
             List<Quiz_Attempts> quizAttemptsList = new ArrayList<>();
             if (task.isSuccessful()) {
                 QuerySnapshot querySnapshot = task.getResult();
                 if (querySnapshot != null) {
                     for (DocumentSnapshot documentSnapshot : querySnapshot.getDocuments()) {
-                        String courseId = documentSnapshot.getString("course_id");
                         String quizId = documentSnapshot.getString("quiz_id");
                         String score = String.valueOf(documentSnapshot.getLong("score").intValue());
-                        Quiz_Attempts quizAttempt = new Quiz_Attempts(courseId, quizId, score, userId);
+                        Quiz_Attempts quizAttempt = new Quiz_Attempts(course_id, quizId, score, userId);
                         quizAttemptsList.add(quizAttempt);
                     }
                 }

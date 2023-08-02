@@ -27,7 +27,9 @@ public class Student_Quiz_Attempt_Fragment extends Fragment {
     List<Quiz_Attempts> quizAttemptsList = new ArrayList<>();
     FirebaseHelper firebaseHelper;
     QuizAttemptedAdapter quizAdapter;
-    public Student_Quiz_Attempt_Fragment() {
+    String course_id;
+    public Student_Quiz_Attempt_Fragment(String course_id) {
+        this.course_id = course_id;
     }
 
     @Override
@@ -46,7 +48,7 @@ public class Student_Quiz_Attempt_Fragment extends Fragment {
     }
     public void add_data_to_course_leading(){
         String student_id = requireContext().getSharedPreferences("student_data", Context.MODE_PRIVATE).getString("id","");
-        firebaseHelper.getQuizAttemptsByUserId(student_id).addOnCompleteListener(l -> {
+        firebaseHelper.getQuizAttemptsByUserId(student_id, course_id).addOnCompleteListener(l -> {
             if (l.isSuccessful()) {
                 quizAdapter.mData = l.getResult();
                 quizAdapter.notifyDataSetChanged();

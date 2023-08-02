@@ -65,7 +65,7 @@ public class Student_Course_Enrolled_Activity extends AppCompatActivity {
 
         // add Fragments in your ViewPagerFragmentAdapter class
         myAdapter.addFragment(new Student_Quiz_View(course_id, Title));
-        myAdapter.addFragment(new Student_Quiz_Attempt_Fragment());
+        myAdapter.addFragment(new Student_Quiz_Attempt_Fragment(course_id));
 
         myViewPager2.setOrientation(ViewPager2.ORIENTATION_HORIZONTAL);
         myViewPager2.setAdapter(myAdapter);
