@@ -66,7 +66,7 @@ public class Teacher_main extends AppCompatActivity {
                     loadFrag(new Teacher_Search_Fragment());
                     add_course.setVisibility(View.GONE);
                 } else if (model.getId() == 3) {
-                    loadFrag(new Teacher_Profile_Fragment());
+                    loadFrag(new Teacher_Profile_Fragment(btm_bar));
                     add_course.setVisibility(View.GONE);
                 }
                 return null;

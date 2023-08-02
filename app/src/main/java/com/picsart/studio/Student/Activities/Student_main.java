@@ -59,7 +59,7 @@ public class Student_main extends AppCompatActivity {
                 } else if (model.getId() == 3) {
                     loadFrag(new student_search());
                 } else if (model.getId() == 4) {
-                    loadFrag(new student_profile());
+                    loadFrag(new student_profile(btm_bar));
                 }
             return null;
             }

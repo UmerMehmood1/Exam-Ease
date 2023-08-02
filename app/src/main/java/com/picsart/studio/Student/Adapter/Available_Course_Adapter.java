@@ -21,9 +21,11 @@ import java.util.List;
 public class Available_Course_Adapter extends RecyclerView.Adapter<Available_Course_Adapter.MyViewHolder> {
     private Context context ;
     private List<Course> mData ;
-    public Available_Course_Adapter(Context context, List<Course> mData) {
+    String intent_name;
+    public Available_Course_Adapter(Context context, List<Course> mData, String intent_name) {
         this.context = context;
         this.mData = mData;
+        this.intent_name = intent_name;
     }
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -38,16 +40,18 @@ public class Available_Course_Adapter extends RecyclerView.Adapter<Available_Cou
         holder.t_quiz.setText(String.valueOf(mData.get(position).getTotalQuizzes()));
         holder.duration.setText(mData.get(position).getDuration());
         holder.course_img.setImageResource(mData.get(position).getImg());
-        holder.cardview_content.setOnClickListener(l ->{
-                Intent intent = new Intent(context, Course_Detail.class);
-                // passing data to the book activity
-                intent.putExtra("Course_id",mData.get(position).getId());
-                intent.putExtra("Title",mData.get(position).getName());
-                intent.putExtra("Description",mData.get(position).getDescription());
-                intent.putExtra("Category",mData.get(position).getCategory());
-                intent.putExtra("Thumbnail",mData.get(position).getImg());
-                context.startActivity(intent);
-        });
+        if (intent_name.equals("student")){
+            holder.cardview_content.setOnClickListener(l ->{
+                    Intent intent = new Intent(context, Course_Detail.class);
+                    // passing data to the book activity
+                    intent.putExtra("Course_id",mData.get(position).getId());
+                    intent.putExtra("Title",mData.get(position).getName());
+                    intent.putExtra("Description",mData.get(position).getDescription());
+                    intent.putExtra("Category",mData.get(position).getCategory());
+                    intent.putExtra("Thumbnail",mData.get(position).getImg());
+                    context.startActivity(intent);
+            });
+        }
 
 
     }

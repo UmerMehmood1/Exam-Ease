@@ -47,7 +47,7 @@ public class course_available extends Fragment {
         name.setText("Welcome, "+username);
         RecyclerView availablerecycler = view.findViewById(R.id.recycler_view_course_available);
         add_data_to_course_leading();
-        availablecoursesAdapter = new Available_Course_Adapter(requireContext(), available_courses);
+        availablecoursesAdapter = new Available_Course_Adapter(requireContext(), available_courses, "student");
         availablerecycler.setLayoutManager(new GridLayoutManager(requireContext(), 2));
         availablerecycler.setAdapter(availablecoursesAdapter);
         add_data_to_course_leading();

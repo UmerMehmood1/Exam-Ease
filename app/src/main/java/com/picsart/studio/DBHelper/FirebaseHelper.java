@@ -118,8 +118,6 @@ public class FirebaseHelper {
                     }
                 });
     }
-
-
     private Task<Course> getCourseById(String courseId) {
         String coursesCollectionPath = COURSES_COLLECTION_NAME;
         return firestore.collection(coursesCollectionPath).document(courseId).get()
@@ -247,7 +245,6 @@ public class FirebaseHelper {
             }
         });
     }
-
     public Task<List<Quiz>> getQuizzesByCourseId(String courseId) {
         CollectionReference quizzesRef = FirebaseFirestore.getInstance().collection("quizzes");
         Query query = quizzesRef.whereEqualTo("course_id", courseId);

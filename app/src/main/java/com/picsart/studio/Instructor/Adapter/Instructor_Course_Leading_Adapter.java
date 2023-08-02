@@ -49,8 +49,8 @@ public class Instructor_Course_Leading_Adapter extends RecyclerView.Adapter<Inst
         holder.course_img.setImageResource(mData.get(position).getImg());
         holder.course_title.setText(mData.get(position).getName());
         holder.course_category.setText(mData.get(position).getCategory());
-        holder.course_duration.setText(mData.get(position).getDuration());
-        holder.course_quizzes.setText(String.valueOf(mData.get(position).getTotalQuizzes()));
+        holder.course_duration.setText("• "+mData.get(position).getDuration());
+        holder.course_quizzes.setText("• "+String.valueOf(mData.get(position).getTotalQuizzes())+" Quizzes");
         holder.cardview_content.setOnClickListener(l ->{
             Intent coruse_quiz = new Intent(context, CourseQuizzes.class);
             coruse_quiz.putExtra("course_id",mData.get(position).getId());

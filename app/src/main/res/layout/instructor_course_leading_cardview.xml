@@ -52,7 +52,6 @@
                     android:id="@+id/course_category_at_leading"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="#edecec"
                     android:padding="8dp"
                     android:paddingStart="10dp"
                     android:text="Category" />

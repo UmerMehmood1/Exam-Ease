@@ -32,13 +32,12 @@ public class Teacher_Search_Fragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.student_search_fragment, container, false);
         searchvalue =view.findViewById(R.id.Search_value);
         recyclerView =view.findViewById(R.id.recycler_view_course);
         firebaseHelper = new FirebaseHelper();
-        Available_Course_Adapter availablecoursesAdapter = new Available_Course_Adapter(requireContext(), search_courses);
+        Available_Course_Adapter availablecoursesAdapter = new Available_Course_Adapter(requireContext(), search_courses, "teacher");
         SharedPreferences sh = getActivity().getSharedPreferences("teacher_data", Context.MODE_PRIVATE);
         this.teacher_id = sh.getString("id","");
         String name = sh.getString("name","");

@@ -3,4 +3,8 @@
     <color name="white">#FFFFFFFF</color>
     <color name="green">#17695C</color>
     <color name="lightyellow">#FFA800</color>
+    <color name="primaryDark">#303F9F</color>
+    <color name="primary">#1A237E</color>
+    <color name="accent">#FF4081</color>
+    <color name="textOnBackground">#FFFFFF</color>
 </resources>

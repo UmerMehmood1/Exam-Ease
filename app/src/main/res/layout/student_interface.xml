@@ -3,37 +3,27 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="fill_parent"
-    android:background="@color/green">
+    android:layout_height="match_parent">
 
-    <androidx.cardview.widget.CardView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_above="@+id/btm_nav_bar"
-        android:background="#FFFFFF"
-        android:elevation="0dp"
-        app:cardCornerRadius="0dp"
-        app:cardElevation="0dp">
 
 
         <androidx.fragment.app.FragmentContainerView
             android:id="@+id/student_fragement_viewer"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_above="@id/btm_nav_bar"
             tools:layout="@layout/student_course_enrolled_fragment" />
-    </androidx.cardview.widget.CardView>
+
 
     <com.etebarian.meowbottomnavigation.MeowBottomNavigation
         android:id="@+id/btm_nav_bar"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:background="@color/white"
         android:paddingBottom="15dp"
-        app:itemRippleColor="#17695C"
         app:mbn_backgroundBottomColor="@color/green"
-        app:mbn_circleColor="@color/white"
-        app:mbn_defaultIconColor="@color/white"
-        app:mbn_selectedIconColor="@color/green" />
+        app:mbn_defaultIconColor="@android:color/white"
+        app:mbn_selectedIconColor="@color/green"
+        app:mbn_shadowColor="@android:color/transparent" />
 
 </RelativeLayout>

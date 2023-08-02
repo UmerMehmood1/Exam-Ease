@@ -42,7 +42,7 @@ public class student_search extends Fragment {
         searchvalue =view.findViewById(R.id.Search_value);
         recyclerView =view.findViewById(R.id.recycler_view_course);
         firebaseHelper = new FirebaseHelper();
-        Available_Course_Adapter availablecoursesAdapter = new Available_Course_Adapter(requireContext(), search_courses);
+        Available_Course_Adapter availablecoursesAdapter = new Available_Course_Adapter(requireContext(), search_courses, "student");
         recyclerView.setLayoutManager(new GridLayoutManager(requireContext(), 2));
         recyclerView.setAdapter(availablecoursesAdapter);
         searchvalue.addTextChangedListener(new android.text.TextWatcher() {
