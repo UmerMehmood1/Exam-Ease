@@ -335,15 +335,6 @@ public class FirebaseHelper {
         DocumentReference quizRef = firestore.collection(quizzesCollectionPath).document(quizId);
         return quizRef.delete();
     }
-    public Task<Void> updateQuiz(String quizId, String quiz_name, int Total_question, List<Question> options) {
-        String quizzesCollectionPath = QUIZ_COLLECTION_NAME;
-        DocumentReference quizRef = firestore.collection(quizzesCollectionPath).document(quizId);
-        Map<String, Object> quizUpdates = new HashMap<>();
-        quizUpdates.put("quiz_name", quiz_name);
-        quizUpdates.put("total_questions", Total_question);
-        quizUpdates.put("questions", options);
-        return quizRef.update(quizUpdates);
-    }
     public Task<List<Quiz_Attempts>> getQuizAttemptsByCourseId(String courseId) {
         CollectionReference quizAttemptsRef = firestore.collection(QUIZ_ATTEMPT_COLLECTION_NAME);
         Query query = quizAttemptsRef.whereEqualTo("course_id", courseId);
@@ -385,5 +376,14 @@ public class FirebaseHelper {
                 return null;
             }
         });
+    }
+    public Task<Void> updateQuiz(String quizId, String quiz_name, int Total_question, List<Question> options) {
+        String quizzesCollectionPath = QUIZ_COLLECTION_NAME;
+        DocumentReference quizRef = firestore.collection(quizzesCollectionPath).document(quizId);
+        Map<String, Object> quizUpdates = new HashMap<>();
+        quizUpdates.put("quiz_name", quiz_name);
+        quizUpdates.put("total_questions", Total_question);
+        quizUpdates.put("questions", options);
+        return quizRef.update(quizUpdates);
     }
 }
