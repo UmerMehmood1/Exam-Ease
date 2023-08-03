@@ -24,7 +24,8 @@
                 android:id="@+id/course_img_at_leading"
                 android:layout_width="85dp"
                 android:layout_height="85dp"
-                app:srcCompat="@drawable/achievement_svgrepo_com" />
+                app:srcCompat="@drawable/achievement_svgrepo_com"
+                android:contentDescription="TODO" />
         </androidx.cardview.widget.CardView>
 
         <LinearLayout

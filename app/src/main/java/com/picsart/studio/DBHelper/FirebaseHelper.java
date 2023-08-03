@@ -202,7 +202,7 @@ public class FirebaseHelper {
     }
     public Task<List<Course>> findCoursesByName(String searchTerm) {
         CollectionReference coursesRef = firestore.collection(COURSES_COLLECTION_NAME);
-        Query query = coursesRef.whereEqualTo("name", searchTerm);
+        Query query = coursesRef.whereArrayContains("name", searchTerm);
         return query.get().continueWith(task -> {
             List<Course> courses = new ArrayList<>();
             QuerySnapshot querySnapshot = task.getResult();

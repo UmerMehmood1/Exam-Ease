@@ -24,7 +24,8 @@
                 android:id="@+id/imageView"
                 android:layout_width="100dp"
                 android:layout_height="100dp"
-                app:srcCompat="@drawable/img_1_intro" />
+                app:srcCompat="@drawable/img_1_intro"
+                android:contentDescription="TODO" />
         </androidx.cardview.widget.CardView>
 
         <LinearLayout

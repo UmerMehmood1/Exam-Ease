@@ -20,7 +20,8 @@
             android:layout_gravity="center_vertical"
             android:background="@color/design_default_color_on_secondary"
             android:backgroundTint="@color/design_default_color_on_secondary"
-            android:src="@drawable/appsqueeze" />
+            android:src="@drawable/appsqueeze"
+            android:importantForAccessibility="no" />
 
     </androidx.cardview.widget.CardView>
 

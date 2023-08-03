@@ -41,7 +41,8 @@
                 android:layout_height="50dp"
                 android:layout_margin="5dp"
                 android:layout_weight="1"
-                app:srcCompat="@drawable/img_1_intro" />
+                app:srcCompat="@drawable/img_1_intro"
+                android:contentDescription="TODO" />
         </androidx.cardview.widget.CardView>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
