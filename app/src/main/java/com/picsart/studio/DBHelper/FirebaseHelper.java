@@ -202,7 +202,7 @@ public class FirebaseHelper {
     }
     public Task<List<Course>> findCoursesByName(String searchTerm) {
         CollectionReference coursesRef = firestore.collection(COURSES_COLLECTION_NAME);
-        Query query = coursesRef.whereArrayContains("name", searchTerm);
+        Query query = coursesRef.whereEqualTo("name", searchTerm);
         return query.get().continueWith(task -> {
             List<Course> courses = new ArrayList<>();
             QuerySnapshot querySnapshot = task.getResult();
@@ -261,11 +261,12 @@ public class FirebaseHelper {
                     List<Map<String, Object>> questionDataList = (List<Map<String, Object>>) documentSnapshot.get("questions");
                     if (questionDataList != null) {
                         for (Map<String, Object> questionData : questionDataList) {
-                            String questionText = (String) questionData.get("question_text");
+                            String question_Text = (String) questionData.get("question_text");
                             List<String> options = (List<String>) questionData.get("options");
                             Long correctOptionIndexLong = (Long) questionData.get("correct_option_index");
                             int correctOptionIndex = (correctOptionIndexLong != null) ? correctOptionIndexLong.intValue() : -1;
-                            Question question = new Question(questionText, options, correctOptionIndex);
+
+                            Question question = new Question(question_Text, options, correctOptionIndex);
                             questions.add(question);
                         }
                     }
@@ -307,6 +308,7 @@ public class FirebaseHelper {
             questionData.put("options", question.getOptions());
             questionData.put("correct_option_index", question.getCorrectOptionIndex());
             questionsData.add(questionData);
+            Log.d("Bug Detector", "Options are: "+question.getOptions().get(0)+", "+question.getOptions().get(1)+", "+question.getOptions().get(2)+", "+question.getOptions().get(3)+", ");
         }
         quizData.put("questions", questionsData); // Add the list of questions to the quizData
         quizzesCollection.add(quizData);

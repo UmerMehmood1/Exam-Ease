@@ -1,6 +1,7 @@
 package com.picsart.studio.Instructor.Activities;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.Toast;
 
@@ -40,9 +41,9 @@ public class AddQuestionActivity extends AppCompatActivity {
         Toast.makeText(this, course_id + " at Quiz Clicked.", Toast.LENGTH_SHORT).show();
 
         questionList = new ArrayList<>();
-        List<String> data = Arrays.asList(new String[]{"Option 1", "Option 1","Option 1","Option 1"});
-        for (int i = 0; i < total_question; i++){
-            questionList.add(new Question("Some Content",data, 1));
+        for (int i = 0; i < total_question; i++) {
+            List<String> data = Arrays.asList(new String[]{"Option 1", "Option 1","Option 1","Option 1"});
+            questionList.add(new Question("Some Content", data, 1));
         }
         recyclerView = findViewById(R.id.recycler_view_to_add_questions);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -52,7 +53,7 @@ public class AddQuestionActivity extends AppCompatActivity {
 
         add_to_quiz = findViewById(R.id.Add_Questions_btn);
         add_to_quiz.setOnClickListener(v -> {
-            questionList = adapter.getQuestionList();
+            questionList = adapter.questionList;
             firebaseHelper = new FirebaseHelper();
             firebaseHelper.addQuiz(quiz_name, total_question, course_id, teacher_id, questionList);
             finish();

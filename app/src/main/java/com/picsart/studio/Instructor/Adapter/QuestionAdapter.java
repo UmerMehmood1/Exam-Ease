@@ -1,6 +1,7 @@
 package com.picsart.studio.Instructor.Adapter;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,7 +28,7 @@ public class QuestionAdapter extends RecyclerView.Adapter<QuestionAdapter.MyView
     private Context context;
     private String course_id;
     private String teacher_id;
-    private List<Question> questionList;
+    public List<Question> questionList;
 
     public QuestionAdapter(Context context, String teacher_id, String course_id, List<Question> questionList) {
         this.context = context;
@@ -46,10 +47,9 @@ public class QuestionAdapter extends RecyclerView.Adapter<QuestionAdapter.MyView
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
         Question question = questionList.get(position);
-        Toast.makeText(context, String.valueOf(position), Toast.LENGTH_SHORT).show();
         holder.question_content.addTextChangedListener(new TextWatcher() {
             public void afterTextChanged(Editable s) {
-                question.setQuestionText(s.toString());
+                question.setQuestionText(s.toString()); // Update the corresponding Question object in the questionList
             }
 
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -60,7 +60,7 @@ public class QuestionAdapter extends RecyclerView.Adapter<QuestionAdapter.MyView
         });
         holder.option_1_content.addTextChangedListener(new TextWatcher() {
             public void afterTextChanged(Editable s) {
-                question.getOptions().set(0, s.toString());
+                question.getOptions().set(0, s.toString()); // Update the corresponding Question object in the questionList
             }
 
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -71,7 +71,7 @@ public class QuestionAdapter extends RecyclerView.Adapter<QuestionAdapter.MyView
         });
         holder.option_2_content.addTextChangedListener(new TextWatcher() {
             public void afterTextChanged(Editable s) {
-                question.getOptions().set(1, s.toString());
+                question.getOptions().set(1, s.toString()); // Update the corresponding Question object in the questionList
             }
 
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -82,7 +82,7 @@ public class QuestionAdapter extends RecyclerView.Adapter<QuestionAdapter.MyView
         });
         holder.option_3_content.addTextChangedListener(new TextWatcher() {
             public void afterTextChanged(Editable s) {
-                question.getOptions().set(2, s.toString());
+                question.getOptions().set(2, s.toString()); // Update the corresponding Question object in the questionList
             }
 
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -93,7 +93,7 @@ public class QuestionAdapter extends RecyclerView.Adapter<QuestionAdapter.MyView
         });
         holder.option_4_content.addTextChangedListener(new TextWatcher() {
             public void afterTextChanged(Editable s) {
-                question.getOptions().set(3, s.toString());
+                question.getOptions().set(3, s.toString()); // Update the corresponding Question object in the questionList
             }
 
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -106,7 +106,7 @@ public class QuestionAdapter extends RecyclerView.Adapter<QuestionAdapter.MyView
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
-                    question.setCorrectOptionIndex(0);
+                    question.setCorrectOptionIndex(0); // Update the corresponding Question object in the questionList
                 }
             }
         });
@@ -114,7 +114,7 @@ public class QuestionAdapter extends RecyclerView.Adapter<QuestionAdapter.MyView
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
-                    question.setCorrectOptionIndex(1);
+                    question.setCorrectOptionIndex(1); // Update the corresponding Question object in the questionList
                 }
             }
         });
@@ -122,7 +122,7 @@ public class QuestionAdapter extends RecyclerView.Adapter<QuestionAdapter.MyView
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
-                    question.setCorrectOptionIndex(2);
+                    question.setCorrectOptionIndex(2); // Update the corresponding Question object in the questionList
                 }
             }
         });
@@ -130,13 +130,11 @@ public class QuestionAdapter extends RecyclerView.Adapter<QuestionAdapter.MyView
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
-                    question.setCorrectOptionIndex(3);
+                    question.setCorrectOptionIndex(3); // Update the corresponding Question object in the questionList
                 }
             }
         });
-
     }
-
 
     @Override
     public int getItemCount() {
@@ -165,7 +163,4 @@ public class QuestionAdapter extends RecyclerView.Adapter<QuestionAdapter.MyView
         }
     }
 
-    public List<Question> getQuestionList(){
-        return questionList;
-    }
 }
