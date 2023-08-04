@@ -42,7 +42,6 @@
             android:padding="5dp"
             android:paddingStart="5dp"
             android:text="Category"
-            android:textColor="#6E6E6E"
             android:textSize="13sp" />
 
         <TextView
@@ -52,7 +51,6 @@
             android:gravity="start"
             android:paddingStart="5dp"
             android:text="Course Title"
-            android:textColor="#2d2d2d"
             android:textSize="16sp"
             android:textStyle="bold" />
 
@@ -67,8 +65,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:paddingStart="5dp"
-                android:text="Duration"
-                android:textColor="#6E6E6E" />
+                android:text="Duration" />
 
             <TextView
                 android:id="@+id/total_quizzes_at_enrolled"
@@ -76,8 +73,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="end"
-                android:text="Total Quizzes"
-                android:textColor="#6E6E6E" />
+                android:text="Total Quizzes" />
         </LinearLayout>
 
     </LinearLayout>

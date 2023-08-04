@@ -45,7 +45,6 @@ public class Course_Enrolled_Adapter extends RecyclerView.Adapter<Course_Enrolle
 
     @Override
     public void onBindViewHolder(@NonNull Course_Enrolled_Adapter.MyViewHolder holder, int position) {
-
         holder.course_img.setImageResource(mData.get(position).getImg());
         holder.course_title.setText(mData.get(position).getName());
         holder.category.setText(mData.get(position).getCategory());
