@@ -1,0 +1,46 @@
+<!-- item_video.xml -->
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_margin="8dp"
+    android:layout_height="wrap_content"
+    android:elevation="4dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:orientation="vertical"
+        android:padding="12dp"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/videoThumbnail"
+            android:layout_width="match_parent"
+            android:layout_height="180dp"
+            android:scaleType="centerCrop"
+            android:layout_marginBottom="8dp"/>
+
+        <TextView
+            android:id="@+id/videoTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Video Title"
+            android:textStyle="bold"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/videoDescription"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Description here"
+            android:textSize="14sp"
+            android:layout_marginTop="4dp"/>
+
+        <TextView
+            android:id="@+id/videoUrl"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="https://example.com"
+            android:textColor="#2196F3"
+            android:textSize="14sp"
+            android:layout_marginTop="4dp"/>
+    </LinearLayout>
+</androidx.cardview.widget.CardView>

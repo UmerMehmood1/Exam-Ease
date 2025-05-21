@@ -1,34 +1,41 @@
 {
   "project_info": {
-    "project_number": "280481320729",
-    "firebase_url": "https://exam-ease-e3291-default-rtdb.firebaseio.com",
-    "project_id": "exam-ease-e3291",
-    "storage_bucket": "exam-ease-e3291.appspot.com"
+    "project_number": "946080269677",
+    "project_id": "examease-b9a38",
+    "storage_bucket": "examease-b9a38.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:280481320729:android:ca5573e6a70714606fff88",
+        "mobilesdk_app_id": "1:946080269677:android:983e081826787f9b9dc664",
         "android_client_info": {
           "package_name": "com.picsart.studio"
         }
       },
       "oauth_client": [
         {
-          "client_id": "280481320729-nvg65ne3700fqhiartmofergi3vke00g.apps.googleusercontent.com",
+          "client_id": "946080269677-lqbrfubujnmrgqcvc992eg3e41iicf2d.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.picsart.studio",
+            "certificate_hash": "1ea47ee4675aafa45130d7f2ecc3a6b4a97104e7"
+          }
+        },
+        {
+          "client_id": "946080269677-opf7kba86fifhtkc6729f1ns5kr5p873.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyArsUgEh08VzTG2Lu8wntIBMgef2TO-zks"
+          "current_key": "AIzaSyDz8pq8mb6bcOJ0B45NNrTLjMnwsFLJ1d8"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "280481320729-nvg65ne3700fqhiartmofergi3vke00g.apps.googleusercontent.com",
+              "client_id": "946080269677-opf7kba86fifhtkc6729f1ns5kr5p873.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

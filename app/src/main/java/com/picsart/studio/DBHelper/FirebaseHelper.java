@@ -14,10 +14,13 @@ import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.picsart.studio.Models.Course;
+import com.picsart.studio.Models.PDFModel;
 import com.picsart.studio.Models.Question;
 import com.picsart.studio.Models.Quiz;
 import com.picsart.studio.Models.Quiz_Attempts;
 import com.picsart.studio.Models.User;
+import com.picsart.studio.Models.Video;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -31,6 +34,10 @@ public class FirebaseHelper {
     private static final String QUIZ_COLLECTION_NAME = "quizzes";
     private static final String QUIZ_ATTEMPT_COLLECTION_NAME = "quiz_attempts";
     private static final String USER_ENROLLED_IN_COURSE_COLLECTION_NAME = "course_enrolled";
+    private static final String VIDEOS_COLLECTION_NAME = "videos";
+    private static final String PDFS_COLLECTION_NAME = "pdfs";
+    private CollectionReference pdfsCollection;
+    private CollectionReference videosCollection;
     private final FirebaseFirestore firestore;
     private final CollectionReference coursesCollection;
     private CollectionReference contentsCollection;
@@ -46,7 +53,58 @@ public class FirebaseHelper {
         quizzesCollection = firestore.collection(QUIZ_COLLECTION_NAME);
         quizAttemptsCollection = firestore.collection(QUIZ_ATTEMPT_COLLECTION_NAME);
         userEnrolledCollection = firestore.collection(USER_ENROLLED_IN_COURSE_COLLECTION_NAME);
+        videosCollection = firestore.collection(VIDEOS_COLLECTION_NAME);
+        pdfsCollection = firestore.collection(PDFS_COLLECTION_NAME);
+
     }
+    public Task<DocumentReference> addPDFToCourse(String courseId, PDFModel pdfModel) {
+        Map<String, Object> pdfData = new HashMap<>();
+        pdfData.put("name", pdfModel.getName());
+        pdfData.put("url", pdfModel.getUrl());
+        pdfData.put("course_id", courseId);
+        return pdfsCollection.add(pdfData);
+    }
+    public Task<List<PDFModel>> getPDFsByCourseId(String courseId) {
+        return pdfsCollection.whereEqualTo("course_id", courseId)
+                .get()
+                .continueWith(task -> {
+                    List<PDFModel> pdfs = new ArrayList<>();
+                    if (task.isSuccessful()) {
+                        for (DocumentSnapshot doc : task.getResult()) {
+                            String name = doc.getString("name");
+                            String url = doc.getString("url");
+                            String course_id = doc.getString("course_id");
+                            pdfs.add(new PDFModel(name, url, course_id));
+                        }
+                    }
+                    return pdfs;
+                });
+    }
+
+    public Task<DocumentReference> addVideoToCourse(String courseId, String title, String description, String url) {
+        Map<String, Object> videoData = new HashMap<>();
+        videoData.put("course_id", courseId);
+        videoData.put("title", title);
+        videoData.put("description", description);
+        videoData.put("url", url);
+
+        return videosCollection.add(videoData);
+    }
+    public Task<List<Video>> getVideosByCourseId(String courseId) {
+        return videosCollection.whereEqualTo("course_id", courseId)
+                .get()
+                .continueWith(task -> {
+                    List<Video> videos = new ArrayList<>();
+                    if (task.isSuccessful()) {
+                        for (DocumentSnapshot document : task.getResult()) {
+                            Video video = document.toObject(Video.class);
+                            videos.add(video);
+                        }
+                    }
+                    return videos;
+                });
+    }
+
     public Task<User> getUserByID(String user_id) {
         DocumentReference userRef = usersCollection.document(user_id);
         return userRef.get()
@@ -221,11 +279,22 @@ public class FirebaseHelper {
             return courses;
         });
     }
-    public Task<DocumentReference> addCourse(Course course) {
-        String collectionPath = COURSES_COLLECTION_NAME;
-        CollectionReference coursesCreatedRef = firestore.collection(collectionPath);
-        return coursesCreatedRef.add(course);
+    public Task<String> addCourse(Course course) {
+        DocumentReference docRef = coursesCollection.document(); // Generate document reference
+        String generatedId = docRef.getId();
+        course.setId(generatedId); // Set ID in course model
+
+        // Return a task that completes with the document ID
+        return docRef.set(course)
+                .continueWithTask(task -> {
+                    if (!task.isSuccessful()) {
+                        task.getException(); // Propagate error
+                    }
+                    return Tasks.forResult(generatedId); // Return the document ID
+                });
     }
+
+
     public Task<DocumentReference> enrollStudentInCourse(String studentId, String courseId) {
         String courseEnrolledCollectionPath = "course_enrolled";
         CollectionReference courseEnrolledRef = firestore.collection(courseEnrolledCollectionPath);

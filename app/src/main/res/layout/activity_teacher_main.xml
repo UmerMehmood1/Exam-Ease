@@ -25,17 +25,13 @@
         <androidx.fragment.app.FragmentContainerView
             android:id="@+id/instructor_fragement_viewer"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            tools:layout="@layout/instructor_course_leading_fragment" />
-    <com.etebarian.meowbottomnavigation.MeowBottomNavigation
+            tools:layout="@layout/instructor_course_leading_fragment"  android:layout_height="match_parent"/>
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        app:menu="@menu/instructor_btm_nav_menu"
         android:id="@+id/instructor_btm_nav_bar"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:paddingBottom="15dp"
-        app:mbn_backgroundBottomColor="@color/green"
-        app:mbn_defaultIconColor="@android:color/white"
-        app:mbn_selectedIconColor="@color/green"
-        app:mbn_shadowColor="@android:color/transparent" />
+        android:paddingBottom="15dp"/>
 
 </RelativeLayout>

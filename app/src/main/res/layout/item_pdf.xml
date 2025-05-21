@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/card"
+    android:layout_width="match_parent"
+    android:layout_margin="8dp"
+    android:layout_height="wrap_content">
+    <LinearLayout
+        android:padding="12dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_pdf"/>
+        <TextView
+            android:id="@+id/pdfTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="PDF File"
+            android:textSize="18sp"
+            android:padding="16dp" />
+    </LinearLayout>
+</androidx.cardview.widget.CardView>

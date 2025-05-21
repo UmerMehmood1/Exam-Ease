@@ -34,7 +34,11 @@ public class Course_Detail extends AppCompatActivity {
         course_description = findViewById(R.id.course_description_at_details);
         course_description.setText(description);
         course_img = findViewById(R.id.course_img_at_details);
-        course_img.setImageResource(img);
+        try{
+            course_img.setImageResource(img);
+        } catch (Exception e) {
+            course_img.setImageResource(R.drawable.available_courses);
+        }
 
         findViewById(R.id.back_btn).setOnClickListener(l->{finish();});
         findViewById(R.id.enroll_btn).setOnClickListener(l->{

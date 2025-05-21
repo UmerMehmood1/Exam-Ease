@@ -15,7 +15,7 @@ import android.widget.Toast;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 
-import com.etebarian.meowbottomnavigation.MeowBottomNavigation;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.picsart.studio.AboutActivity;
@@ -29,11 +29,11 @@ public class Teacher_Profile_Fragment extends Fragment {
     TextView name, badge_if_any;
     ImageView profile_img;
     ConstraintLayout Log_out, about;
-    MeowBottomNavigation btm_bar;
+    BottomNavigationView btm_bar;
 
     public Teacher_Profile_Fragment() {
     }
-    public Teacher_Profile_Fragment(MeowBottomNavigation btm_bar) {
+    public Teacher_Profile_Fragment(BottomNavigationView btm_bar) {
         this.btm_bar = btm_bar;
     }
 
@@ -65,7 +65,6 @@ public class Teacher_Profile_Fragment extends Fragment {
             getActivity().getSupportFragmentManager().beginTransaction()
                     .replace(R.id.instructor_fragement_viewer, new course_leading())
                     .commit();
-            btm_bar.show(1, true);
         });
         Log_out.setOnClickListener(l->{
             SharedPreferences sharedPreferences = getActivity().getSharedPreferences("teacher_data", Context.MODE_PRIVATE);

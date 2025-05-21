@@ -15,15 +15,13 @@
             tools:layout="@layout/student_course_enrolled_fragment" />
 
 
-    <com.etebarian.meowbottomnavigation.MeowBottomNavigation
+    <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/btm_nav_bar"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        app:menu="@menu/student_bottom_nav_menu"
         android:layout_alignParentBottom="true"
         android:paddingBottom="15dp"
-        app:mbn_backgroundBottomColor="@color/green"
-        app:mbn_defaultIconColor="@android:color/white"
-        app:mbn_selectedIconColor="@color/green"
-        app:mbn_shadowColor="@android:color/transparent" />
+        />
 
 </RelativeLayout>

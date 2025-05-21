@@ -39,7 +39,12 @@ public class Available_Course_Adapter extends RecyclerView.Adapter<Available_Cou
         holder.category.setText(mData.get(position).getCategory());
         holder.t_quiz.setText(String.valueOf(mData.get(position).getTotalQuizzes()));
         holder.duration.setText(mData.get(position).getDuration());
-        holder.course_img.setImageResource(mData.get(position).getImg());
+        try{
+            holder.course_img.setImageResource(mData.get(position).getImg());
+        }
+        catch (Exception e){
+            holder.course_img.setImageResource(R.drawable.available_courses);
+        }
         if (intent_name.equals("student")){
             holder.cardview_content.setOnClickListener(l ->{
                     Intent intent = new Intent(context, Course_Detail.class);

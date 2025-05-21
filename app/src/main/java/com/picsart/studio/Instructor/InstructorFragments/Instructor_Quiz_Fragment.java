@@ -1,6 +1,7 @@
 package com.picsart.studio.Instructor.InstructorFragments;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -15,7 +16,9 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.picsart.studio.DBHelper.FirebaseHelper;
+import com.picsart.studio.Instructor.Activities.AddQuiz;
 import com.picsart.studio.Instructor.Adapter.QuizAdapterAtLeadingCourse;
 import com.picsart.studio.Models.Quiz;
 import com.picsart.studio.R;
@@ -48,6 +51,12 @@ public class Instructor_Quiz_Fragment extends Fragment {
         quizAdapterAtLeadingCourse = new QuizAdapterAtLeadingCourse(requireContext(), quizzes, teacher_id, course_id, Title);
         recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
         recyclerView.setAdapter(quizAdapterAtLeadingCourse);
+        FloatingActionButton floating_button_add_quiz = view.findViewById(R.id.add_quiz_floating_button);
+        floating_button_add_quiz.setOnClickListener(l -> {
+            Intent intent1 = new Intent(getContext(), AddQuiz.class);
+            intent1.putExtra("course_id", course_id);
+            startActivity(intent1);
+        });
         add_data_to_course_leading();
         return view;
     }

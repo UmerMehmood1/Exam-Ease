@@ -45,8 +45,11 @@ public class Instructor_Course_Leading_Adapter extends RecyclerView.Adapter<Inst
     }
     @Override
     public void onBindViewHolder(@NonNull Instructor_Course_Leading_Adapter.MyViewHolder holder, int position) {
-
-        holder.course_img.setImageResource(mData.get(position).getImg());
+        try{
+            holder.course_img.setImageResource(mData.get(position).getImg());
+        } catch (Exception e) {
+            holder.course_img.setImageResource(R.drawable.available_courses);
+        }
         holder.course_title.setText(mData.get(position).getName());
         holder.course_category.setText(mData.get(position).getCategory());
         holder.course_duration.setText("• "+mData.get(position).getDuration());

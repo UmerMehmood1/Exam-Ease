@@ -18,6 +18,9 @@ import com.picsart.studio.Instructor.Adapter.InstructorViewPagerAdapter;
 import com.picsart.studio.Instructor.Adapter.Instructor_Course_Leading_Adapter;
 import com.picsart.studio.Instructor.InstructorFragments.Instructor_Quiz_Fragment;
 import com.picsart.studio.Instructor.InstructorFragments.QuizPerformedFragment;
+import com.picsart.studio.Student.Activities.fragmentForCourseDetailsActivity.CourseVideoFragment;
+import com.picsart.studio.Student.Activities.fragmentForCourseDetailsActivity.PastPaperFragment;
+import com.picsart.studio.Student.Adapter.Course_Enrolled_Adapter;
 import com.picsart.studio.Student.Adapter.QuizAdapter;
 import com.picsart.studio.DBHelper.FirebaseHelper;
 import com.picsart.studio.Models.Quiz;
@@ -64,8 +67,10 @@ public class Student_Course_Enrolled_Activity extends AppCompatActivity {
         myAdapter = new InstructorViewPagerAdapter(getSupportFragmentManager(), getLifecycle());
 
         // add Fragments in your ViewPagerFragmentAdapter class
+        myAdapter.addFragment(new CourseVideoFragment(course_id));
         myAdapter.addFragment(new Student_Quiz_View(course_id, Title));
         myAdapter.addFragment(new Student_Quiz_Attempt_Fragment(course_id));
+        myAdapter.addFragment(new PastPaperFragment(course_id));
 
         myViewPager2.setOrientation(ViewPager2.ORIENTATION_HORIZONTAL);
         myViewPager2.setAdapter(myAdapter);
@@ -75,15 +80,23 @@ public class Student_Course_Enrolled_Activity extends AppCompatActivity {
                 (tab, position) -> {
                     // Set the tab text here based on the position
                     if (position == 0) {
-                        tab.setText("Quizzes");
+                        tab.setText("Videos");
                     } else if (position == 1) {
+                        tab.setText("Quizzes");
+                    }else if (position == 2) {
                         tab.setText("Results");
+                    }else if (position == 3) {
+                        tab.setText("Past Papers");
                     }
                 }
         ).attach();
 
         tvtitle.setText(Title);
         tvdescription.setText(Description);
-        img.setImageResource(image);
+        try {
+            img.setImageResource(image);
+        } catch (Exception e) {
+            img.setImageResource(R.drawable.available_courses);
+        }
     }
 }

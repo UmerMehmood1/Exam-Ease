@@ -24,9 +24,12 @@ import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
+import com.picsart.studio.DBHelper.DummyDataGenerator;
 import com.picsart.studio.DBHelper.FirebaseHelper;
+import com.picsart.studio.Instructor.Activities.Teacher_main;
 import com.picsart.studio.Models.User;
 import com.picsart.studio.R;
+import com.picsart.studio.SharedPreferenceHelper;
 import com.picsart.studio.Student.Activities.Student_main;
 
 import java.util.ArrayList;
@@ -45,14 +48,25 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.intro_sign_up_and_login);
         GoogleSignInOptions options =  new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestIdToken(getString(R.string.default_web_client_id)).requestEmail().build();
         client = GoogleSignIn.getClient(this, options);
-
-                setSlideShower();
+//        DummyDataGenerator dataGenerator = new DummyDataGenerator();
+//        dataGenerator.generateDummyData();
+        setSlideShower();
         SignInButton sign_in_google = findViewById(R.id.sign_in_google);
         Button login_btn = findViewById(R.id.login_btn);
         Button register_btn = findViewById(R.id.register_button);
         sign_in_google.setOnClickListener(l->{
             startActivityForResult(client.getSignInIntent(), 1234);
         });
+        User student = SharedPreferenceHelper.INSTANCE.getStudentData(this);
+        User teacher = SharedPreferenceHelper.INSTANCE.getTeacherData(this);
+        if (student!=null){
+            startActivity(new Intent(getApplicationContext(), Student_main.class));
+            finish();
+        }
+        if (teacher!=null){
+            startActivity(new Intent(getApplicationContext(), Teacher_main.class));
+            finish();
+        }
         register_btn.setOnClickListener(l -> {
             startActivity(new Intent(getApplicationContext(), Register.class));
         });

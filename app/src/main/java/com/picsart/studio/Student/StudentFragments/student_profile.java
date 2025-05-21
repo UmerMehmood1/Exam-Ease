@@ -16,7 +16,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.etebarian.meowbottomnavigation.MeowBottomNavigation;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.ktx.Firebase;
 import com.picsart.studio.AboutActivity;
@@ -29,10 +29,10 @@ public class student_profile extends Fragment {
     TextView name, badge_if_any;
     ImageView profile_img;
     ConstraintLayout Log_out, about;
-    MeowBottomNavigation btm_bar;
+    BottomNavigationView btm_bar;
     public student_profile() {
     }
-    public student_profile(MeowBottomNavigation btm_bar) {
+    public student_profile(BottomNavigationView btm_bar) {
         this.btm_bar = btm_bar;
     }
 
@@ -62,8 +62,6 @@ public class student_profile extends Fragment {
             getActivity().getSupportFragmentManager().beginTransaction()
                     .replace(R.id.student_fragement_viewer, new course_enrolled())
                     .commit();
-            btm_bar.show(1, true);
-
         });
         Log_out.setOnClickListener(l -> {
             SharedPreferences sharedPreferences = getActivity().getSharedPreferences("student_data", Context.MODE_PRIVATE);
